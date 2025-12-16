@@ -4,6 +4,10 @@
     padding: 0;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: #f9fafb;
@@ -32,10 +36,16 @@ nav a {
     color: #2563eb;
     text-decoration: none;
     font-weight: 500;
+    padding: 2px 4px;
 }
 
 nav a:hover {
     text-decoration: underline;
+}
+
+nav a:focus {
+    outline: 2px dashed #2563eb;
+    outline-offset: 2px;
 }
 
 /* SECCIONES */
