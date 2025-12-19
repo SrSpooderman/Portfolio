@@ -20,7 +20,7 @@ class ProyectSkillEntity:
     skill_id: int
 
 @dataclass
-class ProjectEntity:
+class ProyectEntity:
     id: int
     title: str
     description: str
@@ -48,7 +48,7 @@ class UserEntity:
     password: str
 
 @dataclass
-class ProjectMediaEntity:
+class ProyectMediaEntity:
     id: int
     project_id: int
     media_url: str

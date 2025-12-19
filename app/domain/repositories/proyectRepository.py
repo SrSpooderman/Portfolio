@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 class ProyectRepository(ABC):
     @abstractmethod
-    def get_entity_by_id(self, proyect_id: int):
+    def get_entity(self, proyect_id: int):
         pass
 
     @abstractmethod
