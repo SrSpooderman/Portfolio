@@ -1,21 +1,20 @@
-version: '3.9'
-
 services:
   db:
-    image: mysql:8.0
-    container_name: mysql_portfolio
+    image: postgres:16
+    container_name: postgres_portfolio
     restart: always
     env_file:
       - .env
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/var/lib/postgresql/data
 
   web:
     build: .
     command: >
       sh -c "python manage.py migrate &&
+             python manage.py ensure_superadmin &&
              python manage.py collectstatic --noinput &&
              python manage.py runserver 0.0.0.0:8000"
     volumes:
