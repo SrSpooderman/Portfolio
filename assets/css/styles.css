@@ -9,108 +9,229 @@ html {
 }
 
 body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    background-color: #f9fafb;
-    color: #1f2933;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f7f8fa;
+    color: #172033;
     line-height: 1.6;
 }
 
 main {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 0 20px;
+    max-width: 920px;
+    margin: 48px auto;
+    padding: 0 24px;
 }
 
-/* HEADER */
-header h1 {
-    font-size: 2.2rem;
-    margin-bottom: 4px;
-}
-
-header p {
-    color: #4b5563;
-    margin-bottom: 12px;
-}
-
-nav a {
-    color: #2563eb;
+a {
+    color: #155bb5;
     text-decoration: none;
-    font-weight: 500;
-    padding: 2px 4px;
 }
 
-nav a:hover {
+a:hover {
     text-decoration: underline;
 }
 
-nav a:focus {
-    outline: 2px dashed #2563eb;
-    outline-offset: 2px;
+a:focus {
+    outline: 2px solid #155bb5;
+    outline-offset: 3px;
 }
 
-/* SECCIONES */
+.site-header {
+    padding-bottom: 28px;
+    border-bottom: 1px solid #dfe4ea;
+}
+
+.site-logo {
+    display: block;
+    width: min(220px, 70vw);
+    height: auto;
+    margin-bottom: 18px;
+}
+
+.eyebrow {
+    color: #667085;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+h1 {
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    line-height: 1.03;
+    margin-bottom: 12px;
+}
+
+.headline {
+    color: #475467;
+    font-size: 1.15rem;
+    margin-bottom: 18px;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+}
+
+nav a,
+.actions a {
+    font-weight: 700;
+}
+
 section,
 footer {
-    margin: 32px 0;
+    padding: 34px 0;
+    border-bottom: 1px solid #dfe4ea;
+}
+
+footer {
+    border-bottom: 0;
 }
 
 h2 {
     font-size: 1.4rem;
-    margin-bottom: 12px;
+    line-height: 1.2;
+    margin-bottom: 16px;
 }
 
 h3 {
-    font-size: 1.1rem;
-    margin: 16px 0 6px;
+    font-size: 1.08rem;
+    line-height: 1.25;
+    margin-bottom: 8px;
 }
 
-/* TEXTO */
 p {
     margin-bottom: 12px;
 }
 
-ul {
-    margin-left: 20px;
-    margin-bottom: 12px;
+.muted {
+    color: #667085;
 }
 
-li {
-    margin-bottom: 6px;
+.section-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
 }
 
-/* PROYECTOS */
-article {
-    margin-bottom: 24px;
+.section-heading h2,
+.section-heading p {
+    margin-bottom: 0;
 }
 
-article a {
-    color: #2563eb;
-    text-decoration: none;
+.section-heading p {
+    color: #667085;
+    font-size: 0.95rem;
 }
 
-article a:hover {
-    text-decoration: underline;
+.skill-groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
 }
 
-/* SEPARADORES */
-hr {
-    border: none;
-    border-top: 1px solid #e5e7eb;
-    margin: 32px 0;
+.skill-group {
+    padding: 0;
+    border-bottom: 0;
 }
 
-/* FOOTER */
-footer p {
-    margin-bottom: 6px;
+.tag-list,
+.compact-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
 }
 
-/* RESPONSIVE*/
-@media (max-width: 600px) {
-    header h1 {
-        font-size: 1.8rem;
+.tag-list li,
+.compact-tags li,
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 32px;
+    padding: 5px 10px;
+    border: 1px solid #cfd8e3;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #263344;
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+.tag-list small {
+    color: #667085;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.project-list {
+    display: grid;
+    gap: 18px;
+}
+
+.project-card {
+    display: grid;
+    gap: 14px;
+    padding: 20px;
+    border: 1px solid #d9e0e8;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+.project-card p {
+    color: #344054;
+}
+
+.badge {
+    min-height: 26px;
+    margin-bottom: 10px;
+    border-color: #98a2b3;
+    background: #eef4ff;
+    color: #1849a9;
+    font-size: 0.8rem;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+}
+
+.media-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.media-item {
+    overflow: hidden;
+    border: 1px solid #d9e0e8;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+.media-item img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+}
+
+@media (max-width: 640px) {
+    main {
+        margin: 28px auto;
+        padding: 0 18px;
     }
 
-    main {
-        margin: 24px auto;
+    .section-heading {
+        display: block;
+    }
+
+    .project-card {
+        padding: 16px;
     }
 }

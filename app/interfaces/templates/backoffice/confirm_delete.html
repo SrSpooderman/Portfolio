@@ -1,0 +1,21 @@
+{% extends "backoffice/base.html" %}
+
+{% block title %}{{ title }} | Backoffice{% endblock %}
+
+{% block content %}
+    <div class="page-heading">
+        <div>
+            <p class="kicker">Confirm action</p>
+            <h1>{{ title }}</h1>
+        </div>
+    </div>
+
+    <form method="post" class="panel danger-panel">
+        {% csrf_token %}
+        <p>Delete <strong>{{ object }}</strong>?</p>
+        <div class="form-actions">
+            <button type="submit" class="danger-button">Delete</button>
+            <a href="{% url 'backoffice-resource-list' resource.key %}">Cancel</a>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "backoffice/base.html" %}
+
+{% block title %}{{ title }} | Backoffice{% endblock %}
+
+{% block content %}
+    <div class="page-heading">
+        <div>
+            {% if subtitle %}<p class="kicker">{{ subtitle }}</p>{% endif %}
+            <h1>{{ title }}</h1>
+        </div>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="panel form-grid">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="form-errors">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        {% for field in form %}
+            <label class="{% if field.field.widget.input_type == 'checkbox' %}checkbox-row{% endif %}">
+                <span>{{ field.label }}</span>
+                {{ field }}
+                {% if field.help_text %}
+                    <small>{{ field.help_text }}</small>
+                {% endif %}
+                {% if field.errors %}
+                    <small class="field-error">{{ field.errors|striptags }}</small>
+                {% endif %}
+            </label>
+        {% endfor %}
+
+        <div class="form-actions">
+            <button type="submit">Save</button>
+            <a href="{% if resource %}{% url 'backoffice-resource-list' resource.key %}{% else %}{% url 'backoffice-dashboard' %}{% endif %}">Cancel</a>
+        </div>
+    </form>
+{% endblock %}

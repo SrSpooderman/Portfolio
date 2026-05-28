@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backoffice login</title>
+    <link rel="stylesheet" href="{% static 'css/backoffice.css' %}">
+</head>
+<body class="login-page">
+    <main class="login-panel">
+        <img class="login-logo" src="{% static 'img/brand/webweaberLogo.svg' %}" alt="WebWeaver">
+        <p class="kicker">WebWeaver</p>
+        <h1>Backoffice</h1>
+        <p class="muted">Gestiona contenido, proyectos y configuración del sitio.</p>
+
+        <form method="post" class="form-stack">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="form-errors">{{ form.non_field_errors }}</div>
+            {% endif %}
+            <label>
+                Usuario
+                {{ form.username }}
+            </label>
+            <label>
+                Contraseña
+                {{ form.password }}
+            </label>
+            <button type="submit">Entrar</button>
+        </form>
+    </main>
+</body>
+</html>

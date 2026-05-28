@@ -1,0 +1,22 @@
+{% extends "backoffice/base.html" %}
+
+{% block title %}Dashboard | Backoffice{% endblock %}
+
+{% block content %}
+    <div class="page-heading">
+        <div>
+            <p class="kicker">Overview</p>
+            <h1>Dashboard</h1>
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+        {% for card in cards %}
+            <a class="dashboard-card" href="{{ card.url }}">
+                <span>{{ card.count }}</span>
+                <strong>{{ card.label }}</strong>
+                <p>{{ card.description }}</p>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}

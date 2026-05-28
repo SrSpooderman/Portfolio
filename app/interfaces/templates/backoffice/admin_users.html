@@ -1,0 +1,42 @@
+{% extends "backoffice/base.html" %}
+
+{% block title %}Administrators | Backoffice{% endblock %}
+
+{% block content %}
+    <div class="page-heading">
+        <div>
+            <p class="kicker">Superadmin only</p>
+            <h1>Administrators</h1>
+        </div>
+        <a class="button" href="{% url 'backoffice-admin-user-create' %}">New</a>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Active</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.is_active|yesno:"Yes,No" }}</td>
+                        <td class="row-actions">
+                            <a href="{% url 'backoffice-admin-user-edit' user.pk %}">Edit</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="empty-cell">No administrators yet.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

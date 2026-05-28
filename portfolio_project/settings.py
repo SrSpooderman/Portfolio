@@ -95,6 +95,9 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+LOGIN_URL = "/backoffice/login/"
+LOGIN_REDIRECT_URL = "/backoffice/"
+LOGOUT_REDIRECT_URL = "/backoffice/login/"
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",

@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ project.title }} | {% if site_settings %}{{ site_settings.site_name }}{% elif profile %}{{ profile.name }}{% else %}Portfolio{% endif %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% if site_settings and site_settings.favicon_path %}
+        <link rel="icon" href="{% static site_settings.favicon_path %}" type="image/svg+xml">
+    {% endif %}
+    <meta name="description" content="{{ project.description|truncatewords:24 }}">
+</head>
+<body>
+    <main>
+        <header class="site-header">
+            {% if site_settings and site_settings.logo_path %}
+                <a href="{% url 'home' %}" aria-label="{{ site_settings.site_name }}">
+                    <img class="site-logo" src="{% static site_settings.logo_path %}" alt="{{ site_settings.site_name }}">
+                </a>
+            {% endif %}
+            <p class="eyebrow"><a href="{% url 'home' %}">{% if site_settings %}{{ site_settings.site_name }}{% else %}Portfolio{% endif %}</a></p>
+            <h1>{{ project.title }}</h1>
+            {% if project.featured %}
+                <p class="headline">{% if site_settings %}{{ site_settings.featured_label }}{% else %}Proyecto destacado{% endif %}</p>
+            {% endif %}
+
+            <nav aria-label="Navegación de proyecto">
+                <a href="{% url 'home' %}#projects">{% if site_settings %}{{ site_settings.projects_title }}{% else %}Proyectos{% endif %}</a>
+                {% if project.github_url %}
+                    <a href="{{ project.github_url }}" target="_blank" rel="noopener noreferrer">
+                        {% if site_settings %}{{ site_settings.github_label }}{% else %}GitHub{% endif %}
+                    </a>
+                {% endif %}
+                {% if project.demo_url %}
+                    <a href="{{ project.demo_url }}" target="_blank" rel="noopener noreferrer">
+                        {% if site_settings %}{{ site_settings.demo_label }}{% else %}Demo{% endif %}
+                    </a>
+                {% endif %}
+            </nav>
+        </header>
+
+        <section>
+            <h2>{% if site_settings %}{{ site_settings.project_detail_title }}{% else %}Descripción{% endif %}</h2>
+            <p>{{ project.description|linebreaksbr }}</p>
+        </section>
+
+        {% if project.skills.all %}
+            <section>
+                <h2>{% if site_settings %}{{ site_settings.skills_title }}{% else %}Tecnologías{% endif %}</h2>
+                <ul class="compact-tags">
+                    {% for skill in project.skills.all %}
+                        <li>{{ skill.name }}</li>
+                    {% endfor %}
+                </ul>
+            </section>
+        {% endif %}
+
+        {% if project.media.all %}
+            <section>
+                <h2>{% if site_settings %}{{ site_settings.media_title }}{% else %}Media{% endif %}</h2>
+                <div class="media-list">
+                    {% for media in project.media.all %}
+                        <article class="media-item">
+                            {% if media.media_type == "image" %}
+                                <img src="{{ media.media_url }}" alt="{{ media.alt_text|default:project.title }}">
+                            {% else %}
+                                <a href="{{ media.media_url }}" target="_blank" rel="noopener noreferrer">
+                                    {{ media.alt_text|default:media.media_type }}
+                                </a>
+                            {% endif %}
+                        </article>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+    </main>
+</body>
+</html>

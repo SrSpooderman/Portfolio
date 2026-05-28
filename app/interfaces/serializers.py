@@ -5,10 +5,27 @@ from app.adapters.orm.models import (
     Project,
     ProjectMedia,
     ProjectSkill,
+    LearningItem,
+    NavigationItem,
+    SiteSettings,
     Skill,
     SkillCategory,
     SocialMedia,
 )
+
+
+class SiteSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SiteSettings
+        fields = "__all__"
+        read_only_fields = ["id", "updated_at"]
+
+
+class NavigationItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NavigationItem
+        fields = ["id", "label", "url", "open_new_tab", "visible", "order"]
+        read_only_fields = ["id"]
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -46,6 +63,13 @@ class SkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skill
         fields = ["id", "name", "proficiency", "category", "order"]
+        read_only_fields = ["id"]
+
+
+class LearningItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LearningItem
+        fields = ["id", "title", "description", "url", "visible", "order"]
         read_only_fields = ["id"]
 
 

@@ -8,6 +8,9 @@ from app.adapters.orm.models import (
     Project,
     ProjectMedia,
     ProjectSkill,
+    LearningItem,
+    NavigationItem,
+    SiteSettings,
     Skill,
     SkillCategory,
     SocialMedia,
@@ -54,6 +57,64 @@ class BackofficeGroupAdmin(SuperuserOnlyAdminMixin, GroupAdmin):
     pass
 
 
+@admin.register(SiteSettings)
+class SiteSettingsAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ("Identidad", {"fields": ("site_name", "owner_name", "role_title", "hero_eyebrow")}),
+        ("Marca", {"fields": ("logo_path", "favicon_path")}),
+        ("SEO", {"fields": ("meta_description", "meta_author")}),
+        (
+            "Titulos de secciones",
+            {
+                "fields": (
+                    "about_title",
+                    "skills_title",
+                    "projects_title",
+                    "learning_title",
+                    "contact_title",
+                    "project_detail_title",
+                    "media_title",
+                )
+            },
+        ),
+        (
+            "Etiquetas",
+            {
+                "fields": (
+                    "featured_label",
+                    "project_detail_link_label",
+                    "github_label",
+                    "demo_label",
+                    "cv_label",
+                    "email_label",
+                    "phone_label",
+                )
+            },
+        ),
+        (
+            "Mensajes vacios",
+            {
+                "fields": (
+                    "empty_about_message",
+                    "empty_skills_message",
+                    "empty_projects_message",
+                    "empty_category_message",
+                )
+            },
+        ),
+    )
+
+    def has_add_permission(self, request):
+        return not SiteSettings.objects.exists()
+
+
+@admin.register(NavigationItem)
+class NavigationItemAdmin(admin.ModelAdmin):
+    list_display = ("label", "url", "visible", "open_new_tab", "order")
+    list_editable = ("visible", "open_new_tab", "order")
+    search_fields = ("label", "url")
+
+
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ("name", "headline", "email")
@@ -78,6 +139,13 @@ class SkillAdmin(admin.ModelAdmin):
     list_display = ("name", "category", "proficiency", "order")
     list_filter = ("category",)
     search_fields = ("name",)
+
+
+@admin.register(LearningItem)
+class LearningItemAdmin(admin.ModelAdmin):
+    list_display = ("title", "visible", "order")
+    list_editable = ("visible", "order")
+    search_fields = ("title", "description")
 
 
 class ProjectSkillInline(admin.TabularInline):

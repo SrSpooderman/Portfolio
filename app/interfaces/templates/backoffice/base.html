@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Backoffice{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/backoffice.css' %}">
+</head>
+<body>
+    <div class="shell">
+        <aside class="sidebar">
+            <a class="brand" href="{% url 'backoffice-dashboard' %}">
+                <img src="{% static 'img/brand/webweaberLogo.svg' %}" alt="WebWeaver">
+                <span>WebWeaver</span>
+                <strong>Backoffice</strong>
+            </a>
+
+            <nav class="side-nav" aria-label="Backoffice">
+                <a href="{% url 'backoffice-dashboard' %}">Dashboard</a>
+                <a href="{% url 'backoffice-config-site' %}">Config site</a>
+                <a href="{% url 'backoffice-resource-list' 'profiles' %}">Profiles</a>
+                <a href="{% url 'backoffice-resource-list' 'navigation' %}">Navigation</a>
+                <a href="{% url 'backoffice-resource-list' 'projects' %}">Projects</a>
+                <a href="{% url 'backoffice-resource-list' 'project-skills' %}">Project skills</a>
+                <a href="{% url 'backoffice-resource-list' 'project-media' %}">Project media</a>
+                <a href="{% url 'backoffice-resource-list' 'skill-categories' %}">Skill categories</a>
+                <a href="{% url 'backoffice-resource-list' 'skills' %}">Skills</a>
+                <a href="{% url 'backoffice-resource-list' 'learning' %}">Learning</a>
+                <a href="{% url 'backoffice-resource-list' 'social-media' %}">Social media</a>
+                {% if request.user.is_superuser %}
+                    <a href="{% url 'backoffice-admin-users' %}">Administrators</a>
+                {% endif %}
+            </nav>
+        </aside>
+
+        <div class="workspace">
+            <header class="topbar">
+                <div>
+                    <p class="kicker">Signed in as</p>
+                    <strong>{{ request.user.username }}</strong>
+                </div>
+                <div class="top-actions">
+                    <a href="{% url 'home' %}" target="_blank" rel="noopener noreferrer">View site</a>
+                    <a href="{% url 'swagger-ui' %}" target="_blank" rel="noopener noreferrer">API docs</a>
+                    <a href="{% url 'backoffice-logout' %}">Logout</a>
+                </div>
+            </header>
+
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <p class="message {{ message.tags }}">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <main class="content">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+</body>
+</html>

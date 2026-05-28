@@ -5,6 +5,9 @@ from app.adapters.orm.models import (
     Project,
     ProjectMedia,
     ProjectSkill,
+    LearningItem,
+    NavigationItem,
+    SiteSettings,
     Skill,
     SkillCategory,
     SocialMedia,
@@ -14,10 +17,23 @@ from app.interfaces.serializers import (
     ProjectMediaSerializer,
     ProjectSerializer,
     ProjectSkillSerializer,
+    LearningItemSerializer,
+    NavigationItemSerializer,
+    SiteSettingsSerializer,
     SkillCategorySerializer,
     SkillSerializer,
     SocialMediaSerializer,
 )
+
+
+class SiteSettingsViewSet(viewsets.ModelViewSet):
+    queryset = SiteSettings.objects.all()
+    serializer_class = SiteSettingsSerializer
+
+
+class NavigationItemViewSet(viewsets.ModelViewSet):
+    queryset = NavigationItem.objects.all()
+    serializer_class = NavigationItemSerializer
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -38,6 +54,11 @@ class SkillCategoryViewSet(viewsets.ModelViewSet):
 class SkillViewSet(viewsets.ModelViewSet):
     queryset = Skill.objects.select_related("category")
     serializer_class = SkillSerializer
+
+
+class LearningItemViewSet(viewsets.ModelViewSet):
+    queryset = LearningItem.objects.all()
+    serializer_class = LearningItemSerializer
 
 
 class ProjectViewSet(viewsets.ModelViewSet):

@@ -15,6 +15,7 @@ services:
     command: >
       sh -c "python manage.py migrate &&
              python manage.py ensure_superadmin &&
+             python manage.py ensure_site_defaults &&
              python manage.py collectstatic --noinput &&
              python manage.py runserver 0.0.0.0:8000"
     volumes:
