@@ -40,6 +40,10 @@ Ya existen modelos Django para:
 
 - `SiteSettings`: identidad de la web, SEO, titulos de secciones, etiquetas y mensajes vacios.
 - `VisualTheme`: temas visuales reutilizables con colores, fuente, ancho de contenido y radio de tarjetas.
+- `Page`: paginas editables del portfolio, empezando por la home publica.
+- `PageSection`: secciones reordenables y configurables dentro de una pagina.
+- `ContentBlock`: bloques flexibles dentro de secciones para texto, imagenes, CTAs, tecnologias, proyectos destacados y contacto.
+- `HeroSettings`: configuracion especifica del hero: textos, origen de contenido, logo, imagen, CTAs, alineacion, variante, altura y espaciado.
 - `NavigationItem`: enlaces de navegacion del portfolio publico.
 - `Profile`: datos principales del perfil.
 - `SocialMedia`: enlaces sociales asociados opcionalmente a un perfil.
@@ -104,6 +108,10 @@ Los mismos metodos estan disponibles para:
 
 - `/api/social-media/`
 - `/api/visual-themes/`
+- `/api/pages/`
+- `/api/page-sections/`
+- `/api/content-blocks/`
+- `/api/hero-settings/`
 - `/api/skill-categories/`
 - `/api/skills/`
 - `/api/learning/`
@@ -138,6 +146,9 @@ La pagina principal muestra datos dinamicos desde la base de datos:
 
 - Configuracion global del sitio.
 - Tema visual activo: colores, fuente, ancho de contenido y radios.
+- Secciones configurables de la home: tipo, titulo, anchor, visibilidad, orden y variante.
+- Bloques configurables por seccion: texto, imagen, CTA, lista de tecnologias, proyectos destacados, contacto y enlaces.
+- Hero configurable con textos manuales o de perfil, logo opcional, imagen, CTAs y variantes visuales.
 - Navegacion.
 - Perfil.
 - Bio.
@@ -170,6 +181,9 @@ Pantallas principales:
 
 - `Dashboard`: resumen de contenido.
 - `Config site`: identidad, SEO, titulos, etiquetas y mensajes globales.
+- `Pages` y `Page sections`: estructura configurable de la home y futuras paginas.
+- `Content blocks`: bloques ordenables y visibles/ocultos dentro de cada seccion.
+- `Hero configurable`: composicion, textos, CTAs e imagen principal del primer bloque del portfolio.
 - `Visual themes`: colores, fuente, ancho de contenido y radios reutilizables.
 - `Profiles`: perfil principal.
 - `Navigation`: enlaces de cabecera.
@@ -204,6 +218,9 @@ La gestion de administradores desde el backoffice queda restringida a superusuar
 Para adaptar el portfolio a otra persona, entra en el backoffice y edita:
 
 - `Config site`: nombre del sitio, propietario, titular, SEO, titulos de secciones, etiquetas y tema activo.
+- `Pages` y `Page sections`: orden, visibilidad, anchors y variantes de composicion de la home.
+- `Content blocks`: contenido flexible acotado al portfolio, sin convertirlo en un CMS complejo.
+- `Hero configurable`: define si la portada usa datos del perfil, textos manuales o una mezcla.
 - `Visual themes`: paletas y tokens visuales para crear multiples apariencias reutilizables.
 - `Navigation`: enlaces visibles en la cabecera.
 - `Profiles`: datos personales, bio, contacto y CV.

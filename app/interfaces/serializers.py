@@ -2,12 +2,16 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
 
 from app.adapters.orm.models import (
+    ContentBlock,
+    HeroSettings,
+    LearningItem,
+    NavigationItem,
+    Page,
+    PageSection,
     Profile,
     Project,
     ProjectMedia,
     ProjectSkill,
-    LearningItem,
-    NavigationItem,
     SiteSettings,
     Skill,
     SkillCategory,
@@ -57,6 +61,80 @@ class VisualThemeSerializer(ModelCleanSerializerMixin, serializers.ModelSerializ
             "font_family",
             "is_default",
             "order",
+            "updated_at",
+        ]
+        read_only_fields = ["id", "updated_at"]
+
+
+class PageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Page
+        fields = ["id", "title", "slug", "is_home", "visible", "order", "updated_at"]
+        read_only_fields = ["id", "updated_at"]
+
+
+class PageSectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PageSection
+        fields = [
+            "id",
+            "page",
+            "section_type",
+            "title",
+            "anchor",
+            "visible",
+            "order",
+            "layout_variant",
+            "updated_at",
+        ]
+        read_only_fields = ["id", "updated_at"]
+
+
+class ContentBlockSerializer(ModelCleanSerializerMixin, serializers.ModelSerializer):
+    class Meta:
+        model = ContentBlock
+        fields = [
+            "id",
+            "section",
+            "block_type",
+            "title",
+            "body",
+            "image_url",
+            "alt_text",
+            "cta_label",
+            "cta_url",
+            "cta_style",
+            "open_new_tab",
+            "visible",
+            "order",
+            "updated_at",
+        ]
+        read_only_fields = ["id", "updated_at"]
+
+
+class HeroSettingsSerializer(ModelCleanSerializerMixin, serializers.ModelSerializer):
+    class Meta:
+        model = HeroSettings
+        fields = [
+            "id",
+            "section",
+            "content_source",
+            "eyebrow",
+            "title",
+            "subtitle",
+            "show_logo",
+            "background_image_url",
+            "image_alt_text",
+            "alignment",
+            "variant",
+            "height",
+            "spacing",
+            "primary_cta_label",
+            "primary_cta_url",
+            "primary_cta_new_tab",
+            "secondary_cta_label",
+            "secondary_cta_url",
+            "secondary_cta_new_tab",
             "updated_at",
         ]
         read_only_fields = ["id", "updated_at"]

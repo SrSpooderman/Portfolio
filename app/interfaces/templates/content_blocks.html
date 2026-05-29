@@ -1,0 +1,71 @@
+{% for block in section.blocks.all %}
+    {% if block.visible %}
+        {% if block.block_type == "text" %}
+            <article class="content-block text-block">
+                {% if block.title %}<h3>{{ block.title }}</h3>{% endif %}
+                {% if block.body %}<p>{{ block.body|linebreaksbr }}</p>{% endif %}
+            </article>
+        {% elif block.block_type == "image" %}
+            <figure class="content-block image-block">
+                <img src="{{ block.image_url }}" alt="{{ block.alt_text }}">
+                {% if block.title or block.body %}
+                    <figcaption>
+                        {% if block.title %}<strong>{{ block.title }}</strong>{% endif %}
+                        {% if block.body %}<span>{{ block.body }}</span>{% endif %}
+                    </figcaption>
+                {% endif %}
+            </figure>
+        {% elif block.block_type == "cta" %}
+            <article class="content-block cta-block cta-{{ block.cta_style }}">
+                {% if block.title %}<h3>{{ block.title }}</h3>{% endif %}
+                {% if block.body %}<p>{{ block.body|linebreaksbr }}</p>{% endif %}
+                <a href="{{ block.cta_url }}"{% if block.open_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>
+                    {{ block.cta_label }}
+                </a>
+            </article>
+        {% elif block.block_type == "skill_list" %}
+            <article class="content-block">
+                {% if block.title %}<h3>{{ block.title }}</h3>{% endif %}
+                <ul class="compact-tags">
+                    {% for category in skill_categories %}
+                        {% for skill in category.skills.all %}
+                            <li>{{ skill.name }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </article>
+        {% elif block.block_type == "featured_projects" %}
+            <article class="content-block">
+                {% if block.title %}<h3>{{ block.title }}</h3>{% endif %}
+                <div class="project-list section-grid">
+                    {% for project in featured_projects %}
+                        <article class="project-card">
+                            <div>
+                                <span class="badge">{% if site_settings %}{{ site_settings.featured_label }}{% else %}Destacado{% endif %}</span>
+                                <h3><a href="{% url 'project-detail' project.slug %}">{{ project.title }}</a></h3>
+                                <p>{{ project.description|truncatewords:24 }}</p>
+                            </div>
+                        </article>
+                    {% empty %}
+                        <p class="muted">{% if site_settings %}{{ site_settings.empty_projects_message }}{% else %}No hay proyectos destacados.{% endif %}</p>
+                    {% endfor %}
+                </div>
+            </article>
+        {% elif block.block_type == "contact_links" %}
+            <article class="content-block">
+                {% if block.title %}<h3>{{ block.title }}</h3>{% endif %}
+                <div class="actions">
+                    {% if profile and profile.email %}
+                        <a href="mailto:{{ profile.email }}">{% if site_settings %}{{ site_settings.email_label }}{% else %}Email{% endif %}</a>
+                    {% endif %}
+                    {% if profile and profile.cv_file %}
+                        <a href="{{ profile.cv_file.url }}" target="_blank" rel="noopener noreferrer">{% if site_settings %}{{ site_settings.cv_label }}{% else %}CV{% endif %}</a>
+                    {% endif %}
+                    {% for item in social_media %}
+                        <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.platform }}</a>
+                    {% endfor %}
+                </div>
+            </article>
+        {% endif %}
+    {% endif %}
+{% endfor %}

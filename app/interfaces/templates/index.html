@@ -34,177 +34,244 @@
 </head>
 <body>
     <main>
-        <header class="site-header">
-            {% if site_settings and site_settings.logo_path %}
-                <img class="site-logo" src="{% static site_settings.logo_path %}" alt="{{ site_settings.site_name }}">
-            {% endif %}
-            <p class="eyebrow">{% if site_settings %}{{ site_settings.hero_eyebrow }}{% else %}Portfolio{% endif %}</p>
-            <h1>{% if profile %}{{ profile.name }}{% elif site_settings %}{{ site_settings.owner_name }}{% else %}Your Name{% endif %}</h1>
-            <p class="headline">
-                {% if profile and profile.headline %}
-                    {{ profile.headline }}
-                {% elif site_settings %}
-                    {{ site_settings.role_title }}
-                {% else %}
-                    Backend Developer
-                {% endif %}
-            </p>
-
-            {% if navigation_items %}
-                <nav aria-label="Navegación principal">
-                    {% for item in navigation_items %}
-                        <a href="{{ item.url }}"{% if item.open_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>
-                            {{ item.label }}
-                        </a>
-                    {% endfor %}
-                </nav>
-            {% endif %}
-        </header>
-
-        <section id="about">
-            <h2>{% if site_settings %}{{ site_settings.about_title }}{% else %}Sobre mí{% endif %}</h2>
-            {% if profile and profile.bio %}
-                <p>{{ profile.bio|linebreaksbr }}</p>
-            {% else %}
-                <p class="muted">
-                    {% if site_settings %}{{ site_settings.empty_about_message }}{% else %}Edita el perfil desde el backoffice para mostrar una biografía aquí.{% endif %}
-                </p>
-            {% endif %}
-        </section>
-
-        <section id="skills">
-            <h2>{% if site_settings %}{{ site_settings.skills_title }}{% else %}Tecnologías{% endif %}</h2>
-            {% if skill_categories %}
-                <div class="skill-groups">
-                    {% for category in skill_categories %}
-                        <section class="skill-group" aria-labelledby="skill-category-{{ category.id }}">
-                            <h3 id="skill-category-{{ category.id }}">{{ category.category_name }}</h3>
-                            {% if category.skills.all %}
-                                <ul class="tag-list">
-                                    {% for skill in category.skills.all %}
-                                        <li>
-                                            <span>{{ skill.name }}</span>
-                                            {% if skill.proficiency %}
-                                                <small>{{ skill.proficiency }}/100</small>
-                                            {% endif %}
-                                        </li>
-                                    {% endfor %}
-                                </ul>
+        {% for section in page_sections %}
+            {% if section.section_type == "hero" %}
+                {% with hero=section.hero_settings %}
+                <header id="{{ section.anchor }}" class="site-header section-{{ section.layout_variant }} hero-{{ hero.variant|default:'simple' }} hero-align-{{ hero.alignment|default:'left' }} hero-height-{{ hero.height|default:'auto' }} hero-spacing-{{ hero.spacing|default:'normal' }}">
+                    <div class="hero-copy">
+                        {% if not hero or hero.show_logo %}
+                        {% if site_settings and site_settings.logo_path %}
+                            <img class="site-logo" src="{% static site_settings.logo_path %}" alt="{{ site_settings.site_name }}">
+                        {% endif %}
+                        {% endif %}
+                        <p class="eyebrow">
+                            {% if hero.content_source == "manual" %}
+                                {{ hero.eyebrow|default:"Portfolio" }}
+                            {% elif hero.eyebrow %}
+                                {{ hero.eyebrow }}
+                            {% elif site_settings %}
+                                {{ site_settings.hero_eyebrow }}
                             {% else %}
-                                <p class="muted">
-                                    {% if site_settings %}{{ site_settings.empty_category_message }}{% else %}Sin tecnologías en esta categoría.{% endif %}
-                                </p>
+                                Portfolio
                             {% endif %}
-                        </section>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p class="muted">
-                    {% if site_settings %}{{ site_settings.empty_skills_message }}{% else %}Añade categorías y tecnologías desde el backoffice para mostrarlas aquí.{% endif %}
-                </p>
-            {% endif %}
-        </section>
-
-        <section id="projects">
-            <div class="section-heading">
-                <h2>{% if site_settings %}{{ site_settings.projects_title }}{% else %}Proyectos{% endif %}</h2>
-            </div>
-
-            {% if projects %}
-                <div class="project-list">
-                    {% for project in projects %}
-                        <article class="project-card">
-                            <div>
-                                {% if project.featured %}
-                                    <span class="badge">{% if site_settings %}{{ site_settings.featured_label }}{% else %}Destacado{% endif %}</span>
-                                {% endif %}
-                                <h3>
-                                    <a href="{% url 'project-detail' project.slug %}">{{ project.title }}</a>
-                                </h3>
-                                <p>{{ project.description|truncatewords:38 }}</p>
-                            </div>
-
-                            {% if project.skills.all %}
-                                <ul class="compact-tags" aria-label="Tecnologías de {{ project.title }}">
-                                    {% for skill in project.skills.all %}
-                                        <li>{{ skill.name }}</li>
-                                    {% endfor %}
-                                </ul>
+                        </p>
+                        <h1>
+                            {% if hero.content_source == "manual" %}
+                                {{ hero.title|default:"Your Name" }}
+                            {% elif hero.title %}
+                                {{ hero.title }}
+                            {% elif profile %}
+                                {{ profile.name }}
+                            {% elif site_settings %}
+                                {{ site_settings.owner_name }}
+                            {% else %}
+                                Your Name
                             {% endif %}
+                        </h1>
+                        <p class="headline">
+                            {% if hero.content_source == "manual" %}
+                                {{ hero.subtitle|default:"Backend Developer"|linebreaksbr }}
+                            {% elif hero.subtitle %}
+                                {{ hero.subtitle|linebreaksbr }}
+                            {% elif profile and profile.headline %}
+                                {{ profile.headline }}
+                            {% elif site_settings %}
+                                {{ site_settings.role_title }}
+                            {% else %}
+                                Backend Developer
+                            {% endif %}
+                        </p>
 
-                            <div class="actions">
-                                <a href="{% url 'project-detail' project.slug %}">
-                                    {% if site_settings %}{{ site_settings.project_detail_link_label }}{% else %}Ver detalle{% endif %}
-                                </a>
-                                {% if project.github_url %}
-                                    <a href="{{ project.github_url }}" target="_blank" rel="noopener noreferrer">
-                                        {% if site_settings %}{{ site_settings.github_label }}{% else %}GitHub{% endif %}
+                        {% if hero.primary_cta_label or hero.secondary_cta_label %}
+                            <div class="hero-actions">
+                                {% if hero.primary_cta_label and hero.primary_cta_url %}
+                                    <a class="hero-cta primary" href="{{ hero.primary_cta_url }}"{% if hero.primary_cta_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>
+                                        {{ hero.primary_cta_label }}
                                     </a>
                                 {% endif %}
-                                {% if project.demo_url %}
-                                    <a href="{{ project.demo_url }}" target="_blank" rel="noopener noreferrer">
-                                        {% if site_settings %}{{ site_settings.demo_label }}{% else %}Demo{% endif %}
+                                {% if hero.secondary_cta_label and hero.secondary_cta_url %}
+                                    <a class="hero-cta secondary" href="{{ hero.secondary_cta_url }}"{% if hero.secondary_cta_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>
+                                        {{ hero.secondary_cta_label }}
                                     </a>
                                 {% endif %}
                             </div>
-                        </article>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p class="muted">
-                    {% if site_settings %}{{ site_settings.empty_projects_message }}{% else %}Añade proyectos desde el backoffice para mostrarlos aquí.{% endif %}
-                </p>
-            {% endif %}
-        </section>
+                        {% endif %}
 
-        {% if learning_items %}
-            <section id="learning">
-                <h2>{% if site_settings %}{{ site_settings.learning_title }}{% else %}Aprendizaje{% endif %}</h2>
-                <div class="learning-list">
-                    {% for item in learning_items %}
-                        <article class="learning-item">
-                            <h3>
-                                {% if item.url %}
-                                    <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.title }}</a>
-                                {% else %}
-                                    {{ item.title }}
-                                {% endif %}
-                            </h3>
-                            {% if item.description %}
-                                <p>{{ item.description|linebreaksbr }}</p>
-                            {% endif %}
-                        </article>
-                    {% endfor %}
-                </div>
-            </section>
-        {% endif %}
+                        {% if navigation_items %}
+                            <nav aria-label="Navegacion principal">
+                                {% for item in navigation_items %}
+                                    <a href="{{ item.url }}"{% if item.open_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>
+                                        {{ item.label }}
+                                    </a>
+                                {% endfor %}
+                            </nav>
+                        {% endif %}
+                    </div>
 
-        <footer id="contact">
-            <h2>{% if site_settings %}{{ site_settings.contact_title }}{% else %}Contacto{% endif %}</h2>
-            {% if profile and profile.email %}
-                <p>
-                    {% if site_settings %}{{ site_settings.email_label }}{% else %}Email{% endif %}:
-                    <a href="mailto:{{ profile.email }}">{{ profile.email }}</a>
-                </p>
-            {% endif %}
-            {% if profile and profile.phone %}
-                <p>
-                    {% if site_settings %}{{ site_settings.phone_label }}{% else %}Teléfono{% endif %}:
-                    <a href="tel:{{ profile.phone }}">{{ profile.phone }}</a>
-                </p>
-            {% endif %}
+                    {% if hero.background_image_url %}
+                        <figure class="hero-media">
+                            <img src="{{ hero.background_image_url }}" alt="{{ hero.image_alt_text }}">
+                        </figure>
+                    {% endif %}
+                </header>
+                {% endwith %}
+            {% elif section.section_type == "about" %}
+                <section id="{{ section.anchor }}" class="section-{{ section.layout_variant }}">
+                    <h2>{% if section.title %}{{ section.title }}{% elif site_settings %}{{ site_settings.about_title }}{% else %}Sobre mi{% endif %}</h2>
+                    {% include "content_blocks.html" %}
+                    {% if profile and profile.bio %}
+                        <p>{{ profile.bio|linebreaksbr }}</p>
+                    {% else %}
+                        <p class="muted">
+                            {% if site_settings %}{{ site_settings.empty_about_message }}{% else %}Edita el perfil desde el backoffice para mostrar una biografia aqui.{% endif %}
+                        </p>
+                    {% endif %}
+                </section>
+            {% elif section.section_type == "skills" %}
+                <section id="{{ section.anchor }}" class="section-{{ section.layout_variant }}">
+                    <h2>{% if section.title %}{{ section.title }}{% elif site_settings %}{{ site_settings.skills_title }}{% else %}Tecnologias{% endif %}</h2>
+                    {% include "content_blocks.html" %}
+                    {% if skill_categories %}
+                        <div class="skill-groups">
+                            {% for category in skill_categories %}
+                                <section class="skill-group" aria-labelledby="skill-category-{{ category.id }}">
+                                    <h3 id="skill-category-{{ category.id }}">{{ category.category_name }}</h3>
+                                    {% if category.skills.all %}
+                                        <ul class="tag-list">
+                                            {% for skill in category.skills.all %}
+                                                <li>
+                                                    <span>{{ skill.name }}</span>
+                                                    {% if skill.proficiency %}
+                                                        <small>{{ skill.proficiency }}/100</small>
+                                                    {% endif %}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <p class="muted">
+                                            {% if site_settings %}{{ site_settings.empty_category_message }}{% else %}Sin tecnologias en esta categoria.{% endif %}
+                                        </p>
+                                    {% endif %}
+                                </section>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="muted">
+                            {% if site_settings %}{{ site_settings.empty_skills_message }}{% else %}Anade categorias y tecnologias desde el backoffice para mostrarlas aqui.{% endif %}
+                        </p>
+                    {% endif %}
+                </section>
+            {% elif section.section_type == "projects" %}
+                <section id="{{ section.anchor }}" class="section-{{ section.layout_variant }}">
+                    <div class="section-heading">
+                        <h2>{% if section.title %}{{ section.title }}{% elif site_settings %}{{ site_settings.projects_title }}{% else %}Proyectos{% endif %}</h2>
+                    </div>
+                    {% include "content_blocks.html" %}
 
-            <div class="actions">
-                {% if profile and profile.cv_file %}
-                    <a href="{{ profile.cv_file.url }}" target="_blank" rel="noopener noreferrer">
-                        {% if site_settings %}{{ site_settings.cv_label }}{% else %}CV{% endif %}
-                    </a>
+                    {% if projects %}
+                        <div class="project-list">
+                            {% for project in projects %}
+                                <article class="project-card">
+                                    <div>
+                                        {% if project.featured %}
+                                            <span class="badge">{% if site_settings %}{{ site_settings.featured_label }}{% else %}Destacado{% endif %}</span>
+                                        {% endif %}
+                                        <h3>
+                                            <a href="{% url 'project-detail' project.slug %}">{{ project.title }}</a>
+                                        </h3>
+                                        <p>{{ project.description|truncatewords:38 }}</p>
+                                    </div>
+
+                                    {% if project.skills.all %}
+                                        <ul class="compact-tags" aria-label="Tecnologias de {{ project.title }}">
+                                            {% for skill in project.skills.all %}
+                                                <li>{{ skill.name }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+
+                                    <div class="actions">
+                                        <a href="{% url 'project-detail' project.slug %}">
+                                            {% if site_settings %}{{ site_settings.project_detail_link_label }}{% else %}Ver detalle{% endif %}
+                                        </a>
+                                        {% if project.github_url %}
+                                            <a href="{{ project.github_url }}" target="_blank" rel="noopener noreferrer">
+                                                {% if site_settings %}{{ site_settings.github_label }}{% else %}GitHub{% endif %}
+                                            </a>
+                                        {% endif %}
+                                        {% if project.demo_url %}
+                                            <a href="{{ project.demo_url }}" target="_blank" rel="noopener noreferrer">
+                                                {% if site_settings %}{{ site_settings.demo_label }}{% else %}Demo{% endif %}
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </article>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="muted">
+                            {% if site_settings %}{{ site_settings.empty_projects_message }}{% else %}Anade proyectos desde el backoffice para mostrarlos aqui.{% endif %}
+                        </p>
+                    {% endif %}
+                </section>
+            {% elif section.section_type == "learning" %}
+                {% if learning_items %}
+                    <section id="{{ section.anchor }}" class="section-{{ section.layout_variant }}">
+                        <h2>{% if section.title %}{{ section.title }}{% elif site_settings %}{{ site_settings.learning_title }}{% else %}Aprendizaje{% endif %}</h2>
+                        {% include "content_blocks.html" %}
+                        <div class="learning-list">
+                            {% for item in learning_items %}
+                                <article class="learning-item">
+                                    <h3>
+                                        {% if item.url %}
+                                            <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.title }}</a>
+                                        {% else %}
+                                            {{ item.title }}
+                                        {% endif %}
+                                    </h3>
+                                    {% if item.description %}
+                                        <p>{{ item.description|linebreaksbr }}</p>
+                                    {% endif %}
+                                </article>
+                            {% endfor %}
+                        </div>
+                    </section>
                 {% endif %}
-                {% for item in social_media %}
-                    <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.platform }}</a>
-                {% endfor %}
-            </div>
-        </footer>
+            {% elif section.section_type == "contact" %}
+                <footer id="{{ section.anchor }}" class="section-{{ section.layout_variant }}">
+                    <h2>{% if section.title %}{{ section.title }}{% elif site_settings %}{{ site_settings.contact_title }}{% else %}Contacto{% endif %}</h2>
+                    {% include "content_blocks.html" %}
+                    {% if profile and profile.email %}
+                        <p>
+                            {% if site_settings %}{{ site_settings.email_label }}{% else %}Email{% endif %}:
+                            <a href="mailto:{{ profile.email }}">{{ profile.email }}</a>
+                        </p>
+                    {% endif %}
+                    {% if profile and profile.phone %}
+                        <p>
+                            {% if site_settings %}{{ site_settings.phone_label }}{% else %}Telefono{% endif %}:
+                            <a href="tel:{{ profile.phone }}">{{ profile.phone }}</a>
+                        </p>
+                    {% endif %}
+
+                    <div class="actions">
+                        {% if profile and profile.cv_file %}
+                            <a href="{{ profile.cv_file.url }}" target="_blank" rel="noopener noreferrer">
+                                {% if site_settings %}{{ site_settings.cv_label }}{% else %}CV{% endif %}
+                            </a>
+                        {% endif %}
+                        {% for item in social_media %}
+                            <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.platform }}</a>
+                        {% endfor %}
+                    </div>
+                </footer>
+            {% elif section.section_type == "custom_note" %}
+                <section id="{{ section.anchor }}" class="section-{{ section.layout_variant }}">
+                    {% if section.title %}<h2>{{ section.title }}</h2>{% endif %}
+                    {% include "content_blocks.html" %}
+                </section>
+            {% endif %}
+        {% endfor %}
     </main>
 </body>
 </html>

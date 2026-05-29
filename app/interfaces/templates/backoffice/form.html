@@ -7,6 +7,7 @@
         <div>
             {% if subtitle %}<p class="kicker">{{ subtitle }}</p>{% endif %}
             <h1>{{ title }}</h1>
+            <p class="muted">Rellena solo lo necesario. Los campos opcionales pueden quedarse vacios y ajustarse mas adelante.</p>
         </div>
     </div>
 
@@ -30,8 +31,8 @@
         {% endfor %}
 
         <div class="form-actions">
-            <button type="submit">Save</button>
-            <a href="{% if resource %}{% url 'backoffice-resource-list' resource.key %}{% else %}{% url 'backoffice-dashboard' %}{% endif %}">Cancel</a>
+            <button type="submit">Guardar</button>
+            <a href="{% if resource %}{% url 'backoffice-resource-list' resource.key %}{% else %}{% url 'backoffice-dashboard' %}{% endif %}">Volver sin guardar</a>
         </div>
     </form>
 {% endblock %}

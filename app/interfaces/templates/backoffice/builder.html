@@ -1,0 +1,153 @@
+{% extends "backoffice/base.html" %}
+{% load backoffice_extras %}
+
+{% block title %}Page builder | Backoffice{% endblock %}
+
+{% block content %}
+    <div class="page-heading">
+        <div>
+            <p class="kicker">Home builder</p>
+            <h1>{{ page.title }}</h1>
+            <p class="muted">Aqui decides que se ve, en que orden aparece y que bloques componen cada seccion.</p>
+        </div>
+        <div class="top-actions">
+            <a href="{% url 'home' %}" target="_blank" rel="noopener noreferrer">Preview</a>
+            <a href="{% url 'backoffice-resource-create' 'page-sections' %}">New section</a>
+        </div>
+    </div>
+
+    <section class="panel builder-guide">
+        <div>
+            <p class="kicker">Como se monta</p>
+            <h2>Secciones primero, bloques despues</h2>
+        </div>
+        <ol>
+            <li><strong>Secciones:</strong> hero, sobre mi, tecnologias, proyectos, aprendizaje, contacto o notas custom.</li>
+            <li><strong>Bloques:</strong> texto, imagen, CTA, tecnologias, proyectos destacados o enlaces de contacto dentro de cada seccion.</li>
+            <li><strong>Navegacion:</strong> enlaces que apuntan a los anchors visibles de la home.</li>
+            <li><strong>Tema:</strong> colores y estilo visual sin tocar el contenido.</li>
+        </ol>
+    </section>
+
+    <div class="builder-tabs" aria-label="Builder areas">
+        <a href="#builder-content">Contenido</a>
+        <a href="#builder-layout">Layout</a>
+        <a href="#builder-navigation">Navegacion</a>
+        <a href="#builder-theme">Tema</a>
+        <a href="#builder-seo">SEO basico</a>
+    </div>
+
+    {% if nav_warnings %}
+        <section class="panel builder-warning">
+            <h2>Navegacion pendiente</h2>
+            {% for warning in nav_warnings %}
+                <p>{{ warning }}</p>
+            {% endfor %}
+        </section>
+    {% endif %}
+
+    <section id="builder-content" class="builder-section">
+        <div class="builder-section-heading">
+            <div>
+                <p class="kicker">Contenido</p>
+                <h2>Piezas de la home</h2>
+            </div>
+            <p class="muted">Ordena, oculta y ajusta cada pieza del portfolio publico.</p>
+        </div>
+
+        <div class="builder-list">
+            {% for section in sections %}
+                <article class="builder-card {% if not section.visible %}is-muted{% endif %}">
+                    <div class="builder-card-main">
+                        <span class="builder-order">{{ section.order }}</span>
+                        <div>
+                            <h3>
+                                {% if section.title %}
+                                    {{ section.title }}
+                                {% else %}
+                                    {{ section.get_section_type_display }}
+                                {% endif %}
+                            </h3>
+                            <p>{{ section_help|get_item:section.section_type }}</p>
+                            <div class="builder-meta">
+                                <span>{{ section.get_section_type_display }}</span>
+                                <span>#{{ section.anchor }}</span>
+                                <span>{{ section.get_layout_variant_display }}</span>
+                                <span>{{ section.blocks.count }} blocks</span>
+                                {% if section.visible %}
+                                    <span class="status-pill is-live">Visible</span>
+                                {% else %}
+                                    <span class="status-pill">Oculta</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="builder-actions">
+                        <form method="post" action="{% url 'backoffice-builder-section-action' section.pk 'up' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="button ghost-button" {% if forloop.first %}disabled{% endif %}>Subir</button>
+                        </form>
+                        <form method="post" action="{% url 'backoffice-builder-section-action' section.pk 'down' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="button ghost-button" {% if forloop.last %}disabled{% endif %}>Bajar</button>
+                        </form>
+                        <form method="post" action="{% url 'backoffice-builder-section-action' section.pk 'toggle' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="button ghost-button">{% if section.visible %}Ocultar{% else %}Mostrar{% endif %}</button>
+                        </form>
+                        <form method="post" action="{% url 'backoffice-builder-section-action' section.pk 'duplicate' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="button ghost-button">Duplicar</button>
+                        </form>
+                        {% if section.section_type == "hero" %}
+                            <a class="button ghost-button" href="{% url 'backoffice-resource-list' 'hero-settings' %}">Config hero</a>
+                        {% endif %}
+                        <a class="button ghost-button" href="{% url 'backoffice-resource-list' 'content-blocks' %}">Ver bloques</a>
+                        <a class="button ghost-button" href="{% url 'backoffice-resource-create' 'content-blocks' %}">Nuevo bloque</a>
+                        <a class="button ghost-button" href="{% url 'backoffice-resource-edit' 'page-sections' section.pk %}">Editar</a>
+                        {% if section.visible %}
+                            <a class="button ghost-button" href="{% url 'home' %}#{{ section.anchor }}" target="_blank" rel="noopener noreferrer">Ver</a>
+                        {% endif %}
+                    </div>
+                </article>
+            {% empty %}
+                <div class="panel empty-builder">
+                    <h2>No hay secciones configuradas</h2>
+                    <p class="muted">La home publica usara el fallback por defecto hasta que crees secciones.</p>
+                    <a class="button" href="{% url 'backoffice-resource-create' 'page-sections' %}">New section</a>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <div class="builder-panels">
+        <section id="builder-layout" class="panel builder-info-panel">
+            <p class="kicker">Layout</p>
+            <h2>Composicion</h2>
+            <p>Cada seccion puede usar variantes como Simple, Compacta, Editorial, Grid, Lista o Destacada.</p>
+            <a href="{% url 'backoffice-resource-list' 'page-sections' %}">Editar variantes</a>
+        </section>
+
+        <section id="builder-navigation" class="panel builder-info-panel">
+            <p class="kicker">Navegacion</p>
+            <h2>Anchors</h2>
+            <p>Usa los anchors de las secciones para que Navigation apunte a piezas concretas de la home.</p>
+            <a href="{% url 'backoffice-resource-list' 'navigation' %}">Editar navegacion</a>
+        </section>
+
+        <section id="builder-theme" class="panel builder-info-panel">
+            <p class="kicker">Tema</p>
+            <h2>{% if site_settings and site_settings.visual_theme %}{{ site_settings.visual_theme }}{% else %}Sin tema activo{% endif %}</h2>
+            <p>El tema controla colores, tipografia, ancho y radios. El contenido vive separado.</p>
+            <a href="{% url 'backoffice-resource-list' 'visual-themes' %}">Editar temas</a>
+        </section>
+
+        <section id="builder-seo" class="panel builder-info-panel">
+            <p class="kicker">SEO basico</p>
+            <h2>Comparticion</h2>
+            <p>Por ahora se usa la descripcion global del sitio. Los campos SEO avanzados quedan para la siguiente fase.</p>
+            <a href="{% url 'backoffice-config-site' %}">Editar config site</a>
+        </section>
+    </div>
+{% endblock %}

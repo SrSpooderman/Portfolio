@@ -4,12 +4,16 @@ from django.contrib.auth.models import Group, User
 from django.contrib.admin.sites import NotRegistered
 
 from app.adapters.orm.models import (
+    ContentBlock,
+    HeroSettings,
+    LearningItem,
+    NavigationItem,
+    Page,
+    PageSection,
     Profile,
     Project,
     ProjectMedia,
     ProjectSkill,
-    LearningItem,
-    NavigationItem,
     SiteSettings,
     Skill,
     SkillCategory,
@@ -115,6 +119,55 @@ class SiteSettingsAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return not SiteSettings.objects.exists()
+
+
+class PageSectionInline(admin.TabularInline):
+    model = PageSection
+    extra = 0
+
+
+class ContentBlockInline(admin.TabularInline):
+    model = ContentBlock
+    extra = 0
+
+
+class HeroSettingsInline(admin.StackedInline):
+    model = HeroSettings
+    extra = 0
+    max_num = 1
+
+
+@admin.register(Page)
+class PageAdmin(admin.ModelAdmin):
+    list_display = ("title", "slug", "is_home", "visible", "order")
+    list_editable = ("is_home", "visible", "order")
+    prepopulated_fields = {"slug": ("title",)}
+    search_fields = ("title", "slug")
+    inlines = (PageSectionInline,)
+
+
+@admin.register(PageSection)
+class PageSectionAdmin(admin.ModelAdmin):
+    list_display = ("page", "section_type", "anchor", "visible", "order", "layout_variant")
+    list_editable = ("visible", "order", "layout_variant")
+    list_filter = ("page", "section_type", "visible", "layout_variant")
+    search_fields = ("title", "anchor")
+    inlines = (HeroSettingsInline, ContentBlockInline)
+
+
+@admin.register(ContentBlock)
+class ContentBlockAdmin(admin.ModelAdmin):
+    list_display = ("section", "block_type", "title", "visible", "order")
+    list_editable = ("visible", "order")
+    list_filter = ("block_type", "visible", "section")
+    search_fields = ("title", "body", "cta_label", "cta_url")
+
+
+@admin.register(HeroSettings)
+class HeroSettingsAdmin(admin.ModelAdmin):
+    list_display = ("section", "content_source", "variant", "alignment", "height", "show_logo")
+    list_filter = ("content_source", "variant", "alignment", "height", "show_logo")
+    search_fields = ("section__title", "section__anchor", "title", "subtitle")
 
 
 @admin.register(NavigationItem)

@@ -3,8 +3,12 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Group, User
 
 from app.adapters.orm.models import (
+    ContentBlock,
+    HeroSettings,
     LearningItem,
     NavigationItem,
+    Page,
+    PageSection,
     Profile,
     Project,
     ProjectMedia,
@@ -57,7 +61,6 @@ class VisualThemeForm(BackofficeFormMixin, forms.ModelForm):
             "card_radius",
             "content_width",
             "font_family",
-            "is_default",
             "order",
         ]
         widgets = {
@@ -69,6 +72,131 @@ class VisualThemeForm(BackofficeFormMixin, forms.ModelForm):
             "text_color": forms.TextInput(attrs={"type": "color"}),
             "muted_text_color": forms.TextInput(attrs={"type": "color"}),
             "border_color": forms.TextInput(attrs={"type": "color"}),
+        }
+
+
+class PageForm(BackofficeFormMixin, forms.ModelForm):
+    class Meta:
+        model = Page
+        fields = ["title", "slug", "is_home", "visible", "order"]
+
+
+class PageSectionForm(BackofficeFormMixin, forms.ModelForm):
+    class Meta:
+        model = PageSection
+        fields = ["page", "section_type", "title", "anchor", "visible", "order", "layout_variant"]
+        labels = {
+            "page": "Pagina",
+            "section_type": "Tipo de seccion",
+            "title": "Titulo visible",
+            "anchor": "Anchor para navegacion",
+            "visible": "Visible en la web",
+            "order": "Orden",
+            "layout_variant": "Composicion",
+        }
+        help_texts = {
+            "anchor": "Ejemplo: projects. La navegacion interna usara #projects.",
+            "order": "Numeros mas bajos aparecen antes.",
+            "layout_variant": "Cambia la composicion sin tocar el contenido.",
+        }
+
+
+class ContentBlockForm(BackofficeFormMixin, forms.ModelForm):
+    class Meta:
+        model = ContentBlock
+        fields = [
+            "section",
+            "block_type",
+            "title",
+            "body",
+            "image_url",
+            "alt_text",
+            "cta_label",
+            "cta_url",
+            "cta_style",
+            "open_new_tab",
+            "visible",
+            "order",
+        ]
+        widgets = {"body": forms.Textarea(attrs={"rows": 5})}
+        labels = {
+            "section": "Seccion donde aparece",
+            "block_type": "Tipo de bloque",
+            "title": "Titulo",
+            "body": "Texto",
+            "image_url": "URL de imagen",
+            "alt_text": "Texto alternativo",
+            "cta_label": "Texto del boton",
+            "cta_url": "URL del boton",
+            "cta_style": "Estilo del CTA",
+            "open_new_tab": "Abrir en nueva pestana",
+            "visible": "Visible en la web",
+            "order": "Orden dentro de la seccion",
+        }
+        help_texts = {
+            "section": "El bloque se renderiza dentro de esta seccion del portfolio.",
+            "body": "Para notas profesionales o pequenos textos introductorios.",
+            "image_url": "Por ahora usa una URL publica de imagen.",
+            "alt_text": "Describe la imagen para accesibilidad.",
+            "cta_url": "Puede ser una URL completa, un mailto: o un anchor como #contact.",
+            "order": "Numeros mas bajos aparecen antes dentro de la misma seccion.",
+        }
+
+
+class HeroSettingsForm(BackofficeFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["section"].queryset = PageSection.objects.filter(section_type=PageSection.HERO)
+
+    class Meta:
+        model = HeroSettings
+        fields = [
+            "section",
+            "content_source",
+            "eyebrow",
+            "title",
+            "subtitle",
+            "show_logo",
+            "background_image_url",
+            "image_alt_text",
+            "alignment",
+            "variant",
+            "height",
+            "spacing",
+            "primary_cta_label",
+            "primary_cta_url",
+            "primary_cta_new_tab",
+            "secondary_cta_label",
+            "secondary_cta_url",
+            "secondary_cta_new_tab",
+        ]
+        widgets = {"subtitle": forms.Textarea(attrs={"rows": 4})}
+        labels = {
+            "section": "Seccion Hero",
+            "content_source": "Origen del contenido",
+            "eyebrow": "Eyebrow",
+            "title": "Titulo manual",
+            "subtitle": "Subtitulo manual",
+            "show_logo": "Mostrar logo",
+            "background_image_url": "URL de imagen/fondo",
+            "image_alt_text": "Texto alternativo de imagen",
+            "alignment": "Alineacion",
+            "variant": "Variante visual",
+            "height": "Altura",
+            "spacing": "Espaciado",
+            "primary_cta_label": "CTA principal",
+            "primary_cta_url": "URL CTA principal",
+            "primary_cta_new_tab": "CTA principal en nueva pestana",
+            "secondary_cta_label": "CTA secundario",
+            "secondary_cta_url": "URL CTA secundario",
+            "secondary_cta_new_tab": "CTA secundario en nueva pestana",
+        }
+        help_texts = {
+            "content_source": "Perfil usa datos de Profile, Manual usa estos campos, Mezcla usa manual si existe y perfil como fallback.",
+            "section": "Solo secciones de tipo Hero son validas.",
+            "background_image_url": "Activa variantes visuales con imagen o fondo.",
+            "height": "Controla la presencia vertical del primer bloque.",
+            "spacing": "Ajusta el aire interior del hero.",
         }
 
 

@@ -8,6 +8,10 @@ from app.interfaces import api_views, backoffice_views, views
 router = DefaultRouter()
 router.register("site-settings", api_views.SiteSettingsViewSet, basename="site-settings")
 router.register("visual-themes", api_views.VisualThemeViewSet, basename="visual-theme")
+router.register("pages", api_views.PageViewSet, basename="page")
+router.register("page-sections", api_views.PageSectionViewSet, basename="page-section")
+router.register("content-blocks", api_views.ContentBlockViewSet, basename="content-block")
+router.register("hero-settings", api_views.HeroSettingsViewSet, basename="hero-settings")
 router.register("navigation", api_views.NavigationItemViewSet, basename="navigation")
 router.register("profiles", api_views.ProfileViewSet, basename="profile")
 router.register("social-media", api_views.SocialMediaViewSet, basename="social-media")
@@ -25,9 +29,20 @@ urlpatterns = [
     path("backoffice/logout/", backoffice_views.backoffice_logout, name="backoffice-logout"),
     path("backoffice/", backoffice_views.dashboard, name="backoffice-dashboard"),
     path("backoffice/config-site/", backoffice_views.config_site, name="backoffice-config-site"),
+    path("backoffice/builder/", backoffice_views.builder_home, name="backoffice-builder"),
+    path(
+        "backoffice/builder/sections/<int:pk>/<slug:action>/",
+        backoffice_views.builder_section_action,
+        name="backoffice-builder-section-action",
+    ),
     path("backoffice/administrators/", backoffice_views.admin_users, name="backoffice-admin-users"),
     path("backoffice/administrators/new/", backoffice_views.admin_user_create, name="backoffice-admin-user-create"),
     path("backoffice/administrators/<int:pk>/edit/", backoffice_views.admin_user_update, name="backoffice-admin-user-edit"),
+    path(
+        "backoffice/visual-themes/<int:pk>/set-default/",
+        backoffice_views.visual_theme_set_default,
+        name="backoffice-visual-theme-set-default",
+    ),
     path("backoffice/<slug:resource_key>/", backoffice_views.resource_list, name="backoffice-resource-list"),
     path("backoffice/<slug:resource_key>/new/", backoffice_views.resource_create, name="backoffice-resource-create"),
     path("backoffice/<slug:resource_key>/<int:pk>/edit/", backoffice_views.resource_update, name="backoffice-resource-edit"),

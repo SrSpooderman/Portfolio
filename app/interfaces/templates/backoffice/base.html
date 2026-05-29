@@ -6,45 +6,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Backoffice{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/backoffice.css' %}">
+    {% if backoffice_active_theme %}
+        <style>
+            :root {
+                --bo-font-family: {{ backoffice_active_theme.font_family }};
+                --bo-primary: {{ backoffice_active_theme.primary_color }};
+                --bo-secondary: {{ backoffice_active_theme.secondary_color }};
+                --bo-accent: {{ backoffice_active_theme.accent_color }};
+                --bo-background: {{ backoffice_active_theme.background_color }};
+                --bo-surface: {{ backoffice_active_theme.surface_color }};
+                --bo-text: {{ backoffice_active_theme.text_color }};
+                --bo-muted: {{ backoffice_active_theme.muted_text_color }};
+                --bo-border: {{ backoffice_active_theme.border_color }};
+                --bo-radius: {{ backoffice_active_theme.card_radius }}px;
+            }
+        </style>
+    {% endif %}
 </head>
 <body>
     <div class="shell">
         <aside class="sidebar">
             <a class="brand" href="{% url 'backoffice-dashboard' %}">
-                <img src="{% static 'img/brand/webweaberLogo.svg' %}" alt="WebWeaver">
-                <span>WebWeaver</span>
+                {% if backoffice_site_settings and backoffice_site_settings.logo_path %}
+                    <img src="{% static backoffice_site_settings.logo_path %}" alt="{{ backoffice_site_settings.site_name }}">
+                {% else %}
+                    <img src="{% static 'img/brand/webweaberLogo.svg' %}" alt="WebWeaver">
+                {% endif %}
+                <span>{% if backoffice_site_settings %}{{ backoffice_site_settings.site_name }}{% else %}WebWeaver{% endif %}</span>
                 <strong>Backoffice</strong>
             </a>
 
+            {% with url_name=request.resolver_match.url_name resource_key=request.resolver_match.kwargs.resource_key %}
             <nav class="side-nav" aria-label="Backoffice">
-                <a href="{% url 'backoffice-dashboard' %}">Dashboard</a>
-                <a href="{% url 'backoffice-config-site' %}">Config site</a>
-                <a href="{% url 'backoffice-resource-list' 'profiles' %}">Profiles</a>
-                <a href="{% url 'backoffice-resource-list' 'navigation' %}">Navigation</a>
-                <a href="{% url 'backoffice-resource-list' 'visual-themes' %}">Visual themes</a>
-                <a href="{% url 'backoffice-resource-list' 'projects' %}">Projects</a>
-                <a href="{% url 'backoffice-resource-list' 'project-skills' %}">Project skills</a>
-                <a href="{% url 'backoffice-resource-list' 'project-media' %}">Project media</a>
-                <a href="{% url 'backoffice-resource-list' 'skill-categories' %}">Skill categories</a>
-                <a href="{% url 'backoffice-resource-list' 'skills' %}">Skills</a>
-                <a href="{% url 'backoffice-resource-list' 'learning' %}">Learning</a>
-                <a href="{% url 'backoffice-resource-list' 'social-media' %}">Social media</a>
+                <details class="nav-group" {% if url_name == "backoffice-dashboard" or url_name == "backoffice-config-site" or resource_key == "visual-themes" %}open{% endif %}>
+                    <summary>General</summary>
+                    <a class="{% if url_name == 'backoffice-dashboard' %}is-active{% endif %}" href="{% url 'backoffice-dashboard' %}">Inicio</a>
+                    <a class="{% if url_name == 'backoffice-config-site' %}is-active{% endif %}" href="{% url 'backoffice-config-site' %}">Config site</a>
+                    <a class="{% if resource_key == 'visual-themes' %}is-active{% endif %}" href="{% url 'backoffice-resource-list' 'visual-themes' %}">Temas visuales</a>
+                </details>
+
+                <details class="nav-group" {% if url_name == "backoffice-builder" or resource_key == "pages" or resource_key == "page-sections" or resource_key == "content-blocks" or resource_key == "hero-settings" or resource_key == "navigation" %}open{% endif %}>
+                    <summary>Builder</summary>
+                    <a class="{% if url_name == 'backoffice-builder' %}is-active{% endif %}" href="{% url 'backoffice-builder' %}">Home builder</a>
+                    <a class="{% if resource_key == 'pages' %}is-active{% endif %}" href="{% url 'backoffice-resource-list' 'pages' %}">Paginas</a>
+                    <a class="{% if resource_key == 'page-sections' %}is-active{% endif %}" href="{% url 'backoffice-resource-list' 'page-sections' %}">Secciones</a>
+                    <a class="{% if resource_key == 'content-blocks' %}is-active{% endif %}" href="{% url 'backoffice-resource-list' 'content-blocks' %}">Bloques</a>
+                    <a class="{% if resource_key == 'hero-settings' %}is-active{% endif %}" href="{% url 'backoffice-resource-list' 'hero-settings' %}">Hero</a>
+                    <a class="{% if resource_key == 'navigation' %}is-active{% endif %}" href="{% url 'backoffice-resource-list' 'navigation' %}">Navegacion</a>
+                </details>
+
+                <details class="nav-group" {% if resource_key == "profiles" or resource_key == "projects" or resource_key == "project-skills" or resource_key == "project-media" or resource_key == "learning" or resource_key == "social-media" %}open{% endif %}>
+                    <summary>Contenido</summary>
+                    <a class="{% if resource_key == 'profiles' %}is-active{% endif %}" href="{% url 'backoffice-resource-list' 'profiles' %}">Perfil</a>
+                    <a class="{% if resource_key == 'projects' %}is-active{% endif %}" href="{% url 'backoffice-resource-list' 'projects' %}">Proyectos</a>
+                    <a class="{% if resource_key == 'project-skills' %}is-active{% endif %}" href="{% url 'backoffice-resource-list' 'project-skills' %}">Skills de proyecto</a>
+                    <a class="{% if resource_key == 'project-media' %}is-active{% endif %}" href="{% url 'backoffice-resource-list' 'project-media' %}">Media de proyecto</a>
+                    <a class="{% if resource_key == 'learning' %}is-active{% endif %}" href="{% url 'backoffice-resource-list' 'learning' %}">Aprendizaje</a>
+                    <a class="{% if resource_key == 'social-media' %}is-active{% endif %}" href="{% url 'backoffice-resource-list' 'social-media' %}">Redes sociales</a>
+                </details>
+
+                <details class="nav-group" {% if resource_key == "skill-categories" or resource_key == "skills" %}open{% endif %}>
+                    <summary>Tecnologias</summary>
+                    <a class="{% if resource_key == 'skill-categories' %}is-active{% endif %}" href="{% url 'backoffice-resource-list' 'skill-categories' %}">Categorias tech</a>
+                    <a class="{% if resource_key == 'skills' %}is-active{% endif %}" href="{% url 'backoffice-resource-list' 'skills' %}">Tecnologias</a>
+                </details>
+
                 {% if request.user.is_superuser %}
-                    <a href="{% url 'backoffice-admin-users' %}">Administrators</a>
+                    <details class="nav-group" {% if url_name == "backoffice-admin-users" or url_name == "backoffice-admin-user-create" or url_name == "backoffice-admin-user-edit" %}open{% endif %}>
+                        <summary>Sistema</summary>
+                        <a class="{% if url_name == 'backoffice-admin-users' or url_name == 'backoffice-admin-user-create' or url_name == 'backoffice-admin-user-edit' %}is-active{% endif %}" href="{% url 'backoffice-admin-users' %}">Administradores</a>
+                    </details>
                 {% endif %}
             </nav>
+            {% endwith %}
         </aside>
 
         <div class="workspace">
             <header class="topbar">
                 <div>
-                    <p class="kicker">Signed in as</p>
+                    <p class="kicker">Sesion iniciada</p>
                     <strong>{{ request.user.username }}</strong>
                 </div>
                 <div class="top-actions">
-                    <a href="{% url 'home' %}" target="_blank" rel="noopener noreferrer">View site</a>
+                    <a href="{% url 'home' %}" target="_blank" rel="noopener noreferrer">Ver portfolio</a>
                     <a href="{% url 'swagger-ui' %}" target="_blank" rel="noopener noreferrer">API docs</a>
-                    <a href="{% url 'backoffice-logout' %}">Logout</a>
+                    <a href="{% url 'backoffice-logout' %}">Salir</a>
                 </div>
             </header>
 

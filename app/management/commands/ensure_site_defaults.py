@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from app.adapters.orm.models import NavigationItem, SiteSettings, VisualTheme
+from app.adapters.orm.models import NavigationItem, Page, PageSection, SiteSettings, VisualTheme
 
 
 class Command(BaseCommand):
@@ -83,6 +83,41 @@ class Command(BaseCommand):
             settings.visual_theme = VisualTheme.objects.filter(is_default=True).first()
         settings.save()
 
+        home_page, _ = Page.objects.get_or_create(
+            slug="home",
+            defaults={
+                "title": "Home",
+                "is_home": True,
+                "visible": True,
+                "order": 10,
+            },
+        )
+        if not home_page.is_home:
+            home_page.is_home = True
+            home_page.visible = True
+            home_page.save()
+
+        section_defaults = [
+            (PageSection.HERO, "hero", "", PageSection.SIMPLE, 10),
+            (PageSection.ABOUT, "about", "", PageSection.SIMPLE, 20),
+            (PageSection.SKILLS, "skills", "", PageSection.GRID, 30),
+            (PageSection.PROJECTS, "projects", "", PageSection.LIST, 40),
+            (PageSection.LEARNING, "learning", "", PageSection.LIST, 50),
+            (PageSection.CONTACT, "contact", "", PageSection.SIMPLE, 60),
+        ]
+        for section_type, anchor, title, layout_variant, order in section_defaults:
+            PageSection.objects.get_or_create(
+                page=home_page,
+                anchor=anchor,
+                defaults={
+                    "section_type": section_type,
+                    "title": title,
+                    "layout_variant": layout_variant,
+                    "visible": True,
+                    "order": order,
+                },
+            )
+
         defaults = [
             ("Sobre mí", "#about", 10),
             ("Tecnologías", "#skills", 20),
@@ -99,4 +134,5 @@ class Command(BaseCommand):
         action = "Created" if created else "Found"
         self.stdout.write(self.style.SUCCESS(f"{action} site settings '{settings.site_name}'."))
         self.stdout.write(self.style.SUCCESS("Ensured default visual themes."))
+        self.stdout.write(self.style.SUCCESS("Ensured default home page sections."))
         self.stdout.write(self.style.SUCCESS("Ensured default navigation items."))

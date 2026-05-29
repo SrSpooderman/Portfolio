@@ -2,12 +2,16 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import permissions, viewsets
 
 from app.adapters.orm.models import (
+    ContentBlock,
+    HeroSettings,
+    LearningItem,
+    NavigationItem,
+    Page,
+    PageSection,
     Profile,
     Project,
     ProjectMedia,
     ProjectSkill,
-    LearningItem,
-    NavigationItem,
     SiteSettings,
     Skill,
     SkillCategory,
@@ -15,12 +19,16 @@ from app.adapters.orm.models import (
     VisualTheme,
 )
 from app.interfaces.serializers import (
+    ContentBlockSerializer,
+    HeroSettingsSerializer,
+    LearningItemSerializer,
+    NavigationItemSerializer,
+    PageSectionSerializer,
+    PageSerializer,
     ProfileSerializer,
     ProjectMediaSerializer,
     ProjectSerializer,
     ProjectSkillSerializer,
-    LearningItemSerializer,
-    NavigationItemSerializer,
     SiteSettingsSerializer,
     SkillCategorySerializer,
     SkillSerializer,
@@ -62,6 +70,27 @@ class VisualThemeViewSet(PublicReadAuthenticatedWriteMixin, viewsets.ModelViewSe
     queryset = VisualTheme.objects.all()
     serializer_class = VisualThemeSerializer
     lookup_field = "slug"
+
+
+class PageViewSet(PublicReadAuthenticatedWriteMixin, viewsets.ModelViewSet):
+    queryset = Page.objects.prefetch_related("sections")
+    serializer_class = PageSerializer
+    lookup_field = "slug"
+
+
+class PageSectionViewSet(PublicReadAuthenticatedWriteMixin, viewsets.ModelViewSet):
+    queryset = PageSection.objects.select_related("page")
+    serializer_class = PageSectionSerializer
+
+
+class ContentBlockViewSet(PublicReadAuthenticatedWriteMixin, viewsets.ModelViewSet):
+    queryset = ContentBlock.objects.select_related("section", "section__page")
+    serializer_class = ContentBlockSerializer
+
+
+class HeroSettingsViewSet(PublicReadAuthenticatedWriteMixin, viewsets.ModelViewSet):
+    queryset = HeroSettings.objects.select_related("section", "section__page")
+    serializer_class = HeroSettingsSerializer
 
 
 class NavigationItemViewSet(PublicReadAuthenticatedWriteMixin, viewsets.ModelViewSet):

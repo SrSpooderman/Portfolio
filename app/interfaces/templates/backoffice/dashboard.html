@@ -5,8 +5,37 @@
 {% block content %}
     <div class="page-heading">
         <div>
-            <p class="kicker">Overview</p>
-            <h1>Dashboard</h1>
+            <p class="kicker">Panel principal</p>
+            <h1>Construye tu portfolio</h1>
+            <p class="muted">Empieza por la identidad, rellena el contenido y termina montando la home desde el builder.</p>
+        </div>
+        <div class="top-actions">
+            <a href="{% url 'home' %}" target="_blank" rel="noopener noreferrer">Previsualizar</a>
+            <a href="{% url 'backoffice-builder' %}">Abrir builder</a>
+        </div>
+    </div>
+
+    <section class="panel workflow-panel" aria-labelledby="workflow-title">
+        <div>
+            <p class="kicker">Flujo recomendado</p>
+            <h2 id="workflow-title">De cero a portfolio editable</h2>
+        </div>
+        <div class="workflow-steps">
+            {% for step in setup_steps %}
+                <a class="workflow-step" href="{{ step.url }}"{% if step.number == "04" %} target="_blank" rel="noopener noreferrer"{% endif %}>
+                    <span>{{ step.number }}</span>
+                    <strong>{{ step.title }}</strong>
+                    <p>{{ step.description }}</p>
+                    <em>{{ step.action }}</em>
+                </a>
+            {% endfor %}
+        </div>
+    </section>
+
+    <div class="section-title-row">
+        <div>
+            <p class="kicker">Contenido editable</p>
+            <h2>Atajos del backoffice</h2>
         </div>
     </div>
 
