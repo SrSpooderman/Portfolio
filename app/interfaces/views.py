@@ -8,12 +8,16 @@ from app.adapters.orm.models import (
     SiteSettings,
     SkillCategory,
     SocialMedia,
+    VisualTheme,
 )
 
 
 def get_site_context():
+    site_settings = SiteSettings.objects.select_related("visual_theme").first()
+    active_theme = site_settings.active_theme if site_settings else VisualTheme.objects.filter(is_default=True).first()
     return {
-        "site_settings": SiteSettings.objects.first(),
+        "site_settings": site_settings,
+        "active_theme": active_theme,
         "navigation_items": NavigationItem.objects.filter(visible=True),
     }
 

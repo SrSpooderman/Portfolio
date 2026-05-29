@@ -1,4 +1,68 @@
+from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+
+
+class VisualTheme(models.Model):
+    name = models.CharField(max_length=80)
+    slug = models.SlugField(max_length=100, unique=True)
+    primary_color = models.CharField(max_length=7, default="#155bb5")
+    secondary_color = models.CharField(max_length=7, default="#1849a9")
+    accent_color = models.CharField(max_length=7, default="#eef4ff")
+    background_color = models.CharField(max_length=7, default="#f7f8fa")
+    surface_color = models.CharField(max_length=7, default="#ffffff")
+    text_color = models.CharField(max_length=7, default="#172033")
+    muted_text_color = models.CharField(max_length=7, default="#667085")
+    border_color = models.CharField(max_length=7, default="#dfe4ea")
+    card_radius = models.PositiveSmallIntegerField(
+        default=8,
+        validators=[MinValueValidator(0), MaxValueValidator(32)],
+    )
+    content_width = models.PositiveSmallIntegerField(
+        default=920,
+        validators=[MinValueValidator(680), MaxValueValidator(1440)],
+    )
+    font_family = models.CharField(
+        max_length=160,
+        default='system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    )
+    is_default = models.BooleanField(default=False)
+    order = models.PositiveIntegerField(default=0)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["order", "name"]
+
+    def __str__(self):
+        return self.name
+
+    def clean(self):
+        super().clean()
+        color_fields = [
+            "primary_color",
+            "secondary_color",
+            "accent_color",
+            "background_color",
+            "surface_color",
+            "text_color",
+            "muted_text_color",
+            "border_color",
+        ]
+        for field in color_fields:
+            value = getattr(self, field)
+            if (
+                len(value) != 7
+                or not value.startswith("#")
+                or any(char not in "0123456789abcdefABCDEF" for char in value[1:])
+            ):
+                raise ValidationError({field: "Usa un color hexadecimal en formato #RRGGBB."})
+        if any(char in self.font_family for char in "{};<>"):
+            raise ValidationError({"font_family": "La fuente contiene caracteres no permitidos."})
+
+    def save(self, *args, **kwargs):
+        if self.is_default:
+            VisualTheme.objects.exclude(pk=self.pk).update(is_default=False)
+        super().save(*args, **kwargs)
 
 
 class SiteSettings(models.Model):
@@ -8,6 +72,13 @@ class SiteSettings(models.Model):
     hero_eyebrow = models.CharField(max_length=80, default="WebWeaver")
     logo_path = models.CharField(max_length=255, default="img/brand/webweaberLogo.svg")
     favicon_path = models.CharField(max_length=255, default="img/brand/webweaberLogo.svg")
+    visual_theme = models.ForeignKey(
+        VisualTheme,
+        related_name="site_settings",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
     meta_description = models.CharField(
         max_length=255,
         default="Portfolio profesional editable con Django y WebWeaver.",
@@ -51,6 +122,12 @@ class SiteSettings(models.Model):
 
     def __str__(self):
         return self.site_name
+
+    @property
+    def active_theme(self):
+        if self.visual_theme_id:
+            return self.visual_theme
+        return VisualTheme.objects.filter(is_default=True).first()
 
 
 class NavigationItem(models.Model):
@@ -118,7 +195,10 @@ class SkillCategory(models.Model):
 
 class Skill(models.Model):
     name = models.CharField(max_length=100)
-    proficiency = models.PositiveSmallIntegerField(default=0)
+    proficiency = models.PositiveSmallIntegerField(
+        default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+    )
     category = models.ForeignKey(
         SkillCategory,
         related_name="skills",
@@ -147,6 +227,13 @@ class LearningItem(models.Model):
     def __str__(self):
         return self.title
 
+    def clean(self):
+        super().clean()
+        if self.visible and not self.description.strip() and not self.url:
+            raise ValidationError(
+                "Un recurso de aprendizaje visible necesita una descripcion o una URL."
+            )
+
 
 class Project(models.Model):
     title = models.CharField(max_length=160)
@@ -165,6 +252,13 @@ class Project(models.Model):
 
     def __str__(self):
         return self.title
+
+    def clean(self):
+        super().clean()
+        if self.featured and not (self.github_url or self.demo_url):
+            raise ValidationError(
+                "Un proyecto destacado necesita una URL de GitHub o una demo publica."
+            )
 
 
 class ProjectSkill(models.Model):
@@ -200,3 +294,10 @@ class ProjectMedia(models.Model):
 
     def __str__(self):
         return f"{self.project} {self.media_type}"
+
+    def clean(self):
+        super().clean()
+        if not self.media_url:
+            raise ValidationError("El recurso multimedia necesita una URL.")
+        if self.media_type == self.IMAGE and not self.alt_text.strip():
+            raise ValidationError("Las imagenes necesitan texto alternativo.")

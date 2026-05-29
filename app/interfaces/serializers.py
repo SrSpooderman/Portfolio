@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
 
 from app.adapters.orm.models import (
@@ -11,13 +12,53 @@ from app.adapters.orm.models import (
     Skill,
     SkillCategory,
     SocialMedia,
+    VisualTheme,
 )
+
+
+class ModelCleanSerializerMixin:
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+        instance = self.instance or self.Meta.model()
+        for field, value in attrs.items():
+            setattr(instance, field, value)
+        try:
+            instance.full_clean()
+        except DjangoValidationError as exc:
+            detail = exc.message_dict if hasattr(exc, "message_dict") else exc.messages
+            raise serializers.ValidationError(detail) from exc
+        return attrs
 
 
 class SiteSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = SiteSettings
         fields = "__all__"
+        read_only_fields = ["id", "updated_at"]
+
+
+class VisualThemeSerializer(ModelCleanSerializerMixin, serializers.ModelSerializer):
+    class Meta:
+        model = VisualTheme
+        fields = [
+            "id",
+            "name",
+            "slug",
+            "primary_color",
+            "secondary_color",
+            "accent_color",
+            "background_color",
+            "surface_color",
+            "text_color",
+            "muted_text_color",
+            "border_color",
+            "card_radius",
+            "content_width",
+            "font_family",
+            "is_default",
+            "order",
+            "updated_at",
+        ]
         read_only_fields = ["id", "updated_at"]
 
 
@@ -66,14 +107,14 @@ class SkillSerializer(serializers.ModelSerializer):
         read_only_fields = ["id"]
 
 
-class LearningItemSerializer(serializers.ModelSerializer):
+class LearningItemSerializer(ModelCleanSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = LearningItem
         fields = ["id", "title", "description", "url", "visible", "order"]
         read_only_fields = ["id"]
 
 
-class ProjectSerializer(serializers.ModelSerializer):
+class ProjectSerializer(ModelCleanSerializerMixin, serializers.ModelSerializer):
     skills = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
@@ -101,7 +142,7 @@ class ProjectSkillSerializer(serializers.ModelSerializer):
         read_only_fields = ["id"]
 
 
-class ProjectMediaSerializer(serializers.ModelSerializer):
+class ProjectMediaSerializer(ModelCleanSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = ProjectMedia
         fields = ["id", "project", "media_url", "media_type", "alt_text", "order"]

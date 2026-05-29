@@ -9,6 +9,7 @@ from app.adapters.orm.models import (
     Skill,
     SkillCategory,
     SocialMedia,
+    VisualTheme,
 )
 
 __all__ = [
@@ -22,4 +23,5 @@ __all__ = [
     "Skill",
     "SkillCategory",
     "SocialMedia",
+    "VisualTheme",
 ]

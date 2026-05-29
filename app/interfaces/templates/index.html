@@ -8,6 +8,23 @@
     <title>{% if site_settings %}{{ site_settings.site_name }}{% elif profile %}{{ profile.name }}{% else %}Portfolio{% endif %}</title>
 
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% if active_theme %}
+        <style>
+            :root {
+                --font-family: {{ active_theme.font_family }};
+                --color-primary: {{ active_theme.primary_color }};
+                --color-secondary: {{ active_theme.secondary_color }};
+                --color-accent: {{ active_theme.accent_color }};
+                --color-background: {{ active_theme.background_color }};
+                --color-surface: {{ active_theme.surface_color }};
+                --color-text: {{ active_theme.text_color }};
+                --color-muted: {{ active_theme.muted_text_color }};
+                --color-border: {{ active_theme.border_color }};
+                --card-radius: {{ active_theme.card_radius }}px;
+                --content-width: {{ active_theme.content_width }}px;
+            }
+        </style>
+    {% endif %}
     {% if site_settings and site_settings.favicon_path %}
         <link rel="icon" href="{% static site_settings.favicon_path %}" type="image/svg+xml">
     {% endif %}

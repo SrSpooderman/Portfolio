@@ -21,6 +21,7 @@ from app.adapters.orm.models import (
     Skill,
     SkillCategory,
     SocialMedia,
+    VisualTheme,
 )
 from app.interfaces.backoffice_forms import (
     AdminUserCreateForm,
@@ -35,6 +36,7 @@ from app.interfaces.backoffice_forms import (
     SkillCategoryForm,
     SkillForm,
     SocialMediaForm,
+    VisualThemeForm,
 )
 
 
@@ -51,6 +53,7 @@ class Resource:
 RESOURCES = {
     "profiles": Resource("profiles", "Profiles", Profile, ProfileForm, ("name", "headline", "email"), "Persona principal del portfolio."),
     "navigation": Resource("navigation", "Navigation", NavigationItem, NavigationItemForm, ("label", "url", "visible", "order"), "Enlaces visibles en la cabecera."),
+    "visual-themes": Resource("visual-themes", "Visual themes", VisualTheme, VisualThemeForm, ("name", "slug", "is_default", "primary_color", "secondary_color", "order"), "Temas visuales reutilizables para el portfolio publico."),
     "social-media": Resource("social-media", "Social media", SocialMedia, SocialMediaForm, ("platform", "url", "order"), "Redes y enlaces externos."),
     "skill-categories": Resource("skill-categories", "Skill categories", SkillCategory, SkillCategoryForm, ("category_name", "order"), "Agrupaciones de tecnologias."),
     "skills": Resource("skills", "Skills", Skill, SkillForm, ("name", "category", "proficiency", "order"), "Tecnologias y herramientas."),

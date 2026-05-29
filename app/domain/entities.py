@@ -1,6 +1,5 @@
 
 from dataclasses import dataclass
-from typing import List
 
 @dataclass
 class SkillCategoryEntity:
@@ -15,16 +14,19 @@ class SkillEntity:
     category_id: int
 
 @dataclass
-class ProyectSkillEntity:
+class ProjectSkillEntity:
     project_id: int
     skill_id: int
 
 @dataclass
-class ProyectEntity:
+class ProjectEntity:
     id: int
     title: str
+    slug: str
     description: str
-    github_url: str
+    github_url: str = ""
+    demo_url: str = ""
+    featured: bool = False
     order: int = 0
 
 @dataclass
@@ -48,9 +50,11 @@ class UserEntity:
     password: str
 
 @dataclass
-class ProyectMediaEntity:
+class ProjectMediaEntity:
     id: int
     project_id: int
     media_url: str
     media_type: str
+    alt_text: str = ""
+    order: int = 0
 

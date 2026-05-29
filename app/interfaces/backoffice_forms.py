@@ -13,6 +13,7 @@ from app.adapters.orm.models import (
     Skill,
     SkillCategory,
     SocialMedia,
+    VisualTheme,
 )
 
 
@@ -36,6 +37,38 @@ class SiteSettingsForm(BackofficeFormMixin, forms.ModelForm):
             "empty_skills_message": forms.Textarea(attrs={"rows": 2}),
             "empty_projects_message": forms.Textarea(attrs={"rows": 2}),
             "empty_category_message": forms.Textarea(attrs={"rows": 2}),
+        }
+
+
+class VisualThemeForm(BackofficeFormMixin, forms.ModelForm):
+    class Meta:
+        model = VisualTheme
+        fields = [
+            "name",
+            "slug",
+            "primary_color",
+            "secondary_color",
+            "accent_color",
+            "background_color",
+            "surface_color",
+            "text_color",
+            "muted_text_color",
+            "border_color",
+            "card_radius",
+            "content_width",
+            "font_family",
+            "is_default",
+            "order",
+        ]
+        widgets = {
+            "primary_color": forms.TextInput(attrs={"type": "color"}),
+            "secondary_color": forms.TextInput(attrs={"type": "color"}),
+            "accent_color": forms.TextInput(attrs={"type": "color"}),
+            "background_color": forms.TextInput(attrs={"type": "color"}),
+            "surface_color": forms.TextInput(attrs={"type": "color"}),
+            "text_color": forms.TextInput(attrs={"type": "color"}),
+            "muted_text_color": forms.TextInput(attrs={"type": "color"}),
+            "border_color": forms.TextInput(attrs={"type": "color"}),
         }
 
 

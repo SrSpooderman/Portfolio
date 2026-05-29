@@ -39,6 +39,7 @@ El proyecto carga `.env` desde `settings.py` para facilitar el desarrollo local.
 Ya existen modelos Django para:
 
 - `SiteSettings`: identidad de la web, SEO, titulos de secciones, etiquetas y mensajes vacios.
+- `VisualTheme`: temas visuales reutilizables con colores, fuente, ancho de contenido y radio de tarjetas.
 - `NavigationItem`: enlaces de navegacion del portfolio publico.
 - `Profile`: datos principales del perfil.
 - `SocialMedia`: enlaces sociales asociados opcionalmente a un perfil.
@@ -55,7 +56,8 @@ La marca por defecto usa el logo ubicado en:
 assets/img/brand/webweaberLogo.svg
 ```
 
-Desde `Config site` se pueden editar `logo_path` y `favicon_path` para sustituirlo por otro archivo dentro de `assets`.
+Desde `Config site` se pueden editar `logo_path`, `favicon_path` y el tema visual activo. Los temas se gestionan
+desde `Visual themes` y permiten crear tantas variantes visuales como haga falta sin tocar CSS.
 
 Los modelos estan registrados en el admin de Django y tienen una migracion inicial en `app/migrations/0001_initial.py`.
 
@@ -101,12 +103,29 @@ Los mismos metodos estan disponibles para:
 - `DELETE /api/profiles/<id>/`
 
 - `/api/social-media/`
+- `/api/visual-themes/`
 - `/api/skill-categories/`
 - `/api/skills/`
 - `/api/learning/`
 - `/api/projects/`
 - `/api/project-skills/`
 - `/api/project-media/`
+
+Los listados estan paginados con `page` y usan `API_PAGE_SIZE` como tamano de pagina configurable
+por entorno, con valor por defecto `20`.
+
+Filtros disponibles:
+
+- `GET /api/projects/?featured=true`: proyectos destacados.
+- `GET /api/projects/?featured=false`: proyectos no destacados.
+- `GET /api/skills/?category=<id>`: skills de una categoria.
+- `GET /api/skills/?category_name=<nombre>`: skills por nombre exacto de categoria.
+- `GET /api/project-media/?project=<id>`: media de un proyecto.
+- `GET /api/project-media/?project_slug=<slug>`: media por slug de proyecto.
+
+La lectura de la API es publica. Los endpoints de escritura (`POST`, `PUT`, `PATCH`, `DELETE`)
+requieren usuario autenticado mediante sesion de Django o basic auth. La browsable API expone login
+en `/api/auth/login/`.
 
 ### Frontend publico
 
@@ -118,6 +137,7 @@ Django renderiza el portfolio publico con templates:
 La pagina principal muestra datos dinamicos desde la base de datos:
 
 - Configuracion global del sitio.
+- Tema visual activo: colores, fuente, ancho de contenido y radios.
 - Navegacion.
 - Perfil.
 - Bio.
@@ -150,6 +170,7 @@ Pantallas principales:
 
 - `Dashboard`: resumen de contenido.
 - `Config site`: identidad, SEO, titulos, etiquetas y mensajes globales.
+- `Visual themes`: colores, fuente, ancho de contenido y radios reutilizables.
 - `Profiles`: perfil principal.
 - `Navigation`: enlaces de cabecera.
 - `Projects`, `Project skills`, `Project media`: proyectos y contenido asociado.
@@ -182,7 +203,8 @@ La gestion de administradores desde el backoffice queda restringida a superusuar
 
 Para adaptar el portfolio a otra persona, entra en el backoffice y edita:
 
-- `Config site`: nombre del sitio, propietario, titular, SEO, titulos de secciones y etiquetas.
+- `Config site`: nombre del sitio, propietario, titular, SEO, titulos de secciones, etiquetas y tema activo.
+- `Visual themes`: paletas y tokens visuales para crear multiples apariencias reutilizables.
 - `Navigation`: enlaces visibles en la cabecera.
 - `Profiles`: datos personales, bio, contacto y CV.
 - `Skill categories` y `Skills`: tecnologias.

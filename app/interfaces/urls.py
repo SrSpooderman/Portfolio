@@ -7,6 +7,7 @@ from app.interfaces import api_views, backoffice_views, views
 
 router = DefaultRouter()
 router.register("site-settings", api_views.SiteSettingsViewSet, basename="site-settings")
+router.register("visual-themes", api_views.VisualThemeViewSet, basename="visual-theme")
 router.register("navigation", api_views.NavigationItemViewSet, basename="navigation")
 router.register("profiles", api_views.ProfileViewSet, basename="profile")
 router.register("social-media", api_views.SocialMediaViewSet, basename="social-media")
@@ -32,6 +33,7 @@ urlpatterns = [
     path("backoffice/<slug:resource_key>/<int:pk>/edit/", backoffice_views.resource_update, name="backoffice-resource-edit"),
     path("backoffice/<slug:resource_key>/<int:pk>/delete/", backoffice_views.resource_delete, name="backoffice-resource-delete"),
     path("api/", include(router.urls)),
+    path("api/auth/", include("rest_framework.urls")),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     path("api/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),

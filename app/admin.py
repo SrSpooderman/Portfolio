@@ -14,6 +14,7 @@ from app.adapters.orm.models import (
     Skill,
     SkillCategory,
     SocialMedia,
+    VisualTheme,
 )
 
 
@@ -57,11 +58,19 @@ class BackofficeGroupAdmin(SuperuserOnlyAdminMixin, GroupAdmin):
     pass
 
 
+@admin.register(VisualTheme)
+class VisualThemeAdmin(admin.ModelAdmin):
+    list_display = ("name", "slug", "is_default", "primary_color", "secondary_color", "order")
+    list_editable = ("is_default", "order")
+    prepopulated_fields = {"slug": ("name",)}
+    search_fields = ("name", "slug")
+
+
 @admin.register(SiteSettings)
 class SiteSettingsAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Identidad", {"fields": ("site_name", "owner_name", "role_title", "hero_eyebrow")}),
-        ("Marca", {"fields": ("logo_path", "favicon_path")}),
+        ("Marca", {"fields": ("logo_path", "favicon_path", "visual_theme")}),
         ("SEO", {"fields": ("meta_description", "meta_author")}),
         (
             "Titulos de secciones",
