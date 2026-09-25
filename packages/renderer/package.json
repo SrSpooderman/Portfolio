@@ -1,0 +1,1 @@
+{"name":"@portfolio/renderer","version":"0.1.0","type":"module","main":"./src/index.tsx","types":"./src/index.tsx","scripts":{"build":"tsc --noEmit -p tsconfig.json"}}

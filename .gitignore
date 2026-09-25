@@ -1,4 +1,15 @@
 .env
-/.venv
 __pycache__/
 *.pyc
+.venv/
+node_modules/
+dist/
+storybook-static/
+playwright-report/
+test-results/
+.pytest_cache/
+storage/assets/*
+storage/published/*
+!storage/assets/.gitkeep
+!storage/published/.gitkeep
+portfolio_project_bible.md

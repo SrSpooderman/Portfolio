@@ -1,0 +1,1 @@
+{"name":"@portfolio/web","private":true,"type":"module","scripts":{"build":"tsc --noEmit && vite build","dev":"vite --host 0.0.0.0"},"dependencies":{"@portfolio/renderer":"*","react":"^19.1.0","react-dom":"^19.1.0"},"devDependencies":{"@types/react":"^19.1.0","@types/react-dom":"^19.1.0"}}

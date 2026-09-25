@@ -1,0 +1,9 @@
+from typing import Protocol
+
+from app.domain.entities import EditorNode
+
+
+class NodeRepository(Protocol):
+    def get(self, node_id: str) -> EditorNode | None: ...
+    def get_document_nodes(self, document_id: str) -> list[EditorNode]: ...
+    def get_subtree(self, node_id: str) -> list[EditorNode]: ...

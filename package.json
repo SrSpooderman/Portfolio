@@ -1,0 +1,8 @@
+{
+  "name": "portfolio-cms",
+  "private": true,
+  "workspaces": ["apps/web", "apps/backoffice", "packages/renderer"],
+  "scripts": {"build": "npm run build -w @portfolio/renderer && npm run build -w @portfolio/web && npm run build -w @portfolio/backoffice"},
+  "devDependencies": {"typescript": "^5.9.2", "vite": "^7.1.0"},
+  "dependencies": {"react": "^19.1.0", "react-dom": "^19.1.0", "lucide-react": "^0.468.0"}
+}
