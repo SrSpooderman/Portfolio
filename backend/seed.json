@@ -1,0 +1,85 @@
+{
+  "content": [
+    {
+      "type": "Hero",
+      "props": {
+        "id": "Hero-0",
+        "eyebrow": "DISPONIBLE PARA NUEVOS PROYECTOS",
+        "title": "Ideas claras.\nExperiencias memorables.",
+        "description": "Diseño y desarrollo productos digitales que conectan a las personas con las marcas. De la primera idea al último detalle.",
+        "button": "Explora mi trabajo",
+        "link": "#proyectos"
+      }
+    },
+    {
+      "type": "Projects",
+      "props": {
+        "id": "Projects-1",
+        "title": "Una selección de mi trabajo",
+        "items": [
+          {
+            "title": "Forma Studio",
+            "category": "IDENTIDAD · WEB DESIGN",
+            "description": "Una nueva perspectiva para un estudio de arquitectura.",
+            "url": "#contacto",
+            "color": "#e5e6df"
+          },
+          {
+            "title": "Orbit Finance",
+            "category": "PRODUCT DESIGN · DESARROLLO",
+            "description": "Las finanzas personales, un poco más humanas.",
+            "url": "#contacto",
+            "color": "#dedcf0"
+          },
+          {
+            "title": "Terra Objects",
+            "category": "E-COMMERCE · DIRECCIÓN DE ARTE",
+            "description": "Objetos cotidianos con historias extraordinarias.",
+            "url": "#contacto",
+            "color": "#ecdacb"
+          }
+        ]
+      }
+    },
+    {
+      "type": "About",
+      "props": {
+        "id": "About-2",
+        "title": "Diseño con intención.\nCódigo con propósito.",
+        "description": "Soy Alex, diseñador y desarrollador independiente. Combino estrategia, sensibilidad visual y tecnología para convertir problemas complejos en experiencias sencillas.",
+        "detail": "Desde Madrid, colaborando con personas de cualquier lugar."
+      }
+    },
+    {
+      "type": "Skills",
+      "props": {
+        "id": "Skills-3",
+        "title": "De la idea al lanzamiento",
+        "items": [
+          {
+            "title": "01 / Estrategia",
+            "description": "Investigación, concepto y dirección creativa."
+          },
+          {
+            "title": "02 / Diseño",
+            "description": "Identidad, interfaces y experiencias digitales."
+          },
+          {
+            "title": "03 / Desarrollo",
+            "description": "Webs rápidas, accesibles y fáciles de usar."
+          }
+        ]
+      }
+    },
+    {
+      "type": "Contact",
+      "props": {
+        "id": "Contact-4",
+        "title": "¿Tienes algo\nen mente?",
+        "email": "hola@example.com",
+        "text": "Las mejores ideas empiezan con una conversación."
+      }
+    }
+  ],
+  "root": {}
+}

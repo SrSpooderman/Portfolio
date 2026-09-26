@@ -1,0 +1,44 @@
+# Conserva los contenedores y volúmenes existentes tras mover el proyecto.
+name: mvp
+
+services:
+  proxy:
+    image: nginx:1.27-alpine
+    ports: ["${PORT:-8080}:80"]
+    volumes: ["./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro"]
+    depends_on: [frontend, backend]
+    restart: unless-stopped
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://portfolio:${POSTGRES_PASSWORD:?Genera .env}@postgres:5432/portfolio
+      SECRET_KEY: ${SECRET_KEY:?Genera .env}
+      SUPERADMIN_PASSWORD: ${SUPERADMIN_PASSWORD:?Genera .env}
+      SUPERADMIN_EMAIL: ${SUPERADMIN_EMAIL:-admin@example.com}
+      MEDIA_PATH: /app/media
+      PUBLIC_URL: ${PUBLIC_URL:-http://localhost:8080}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+    volumes: ["media:/app/media"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: portfolio
+      POSTGRES_DB: portfolio
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Genera .env}
+    volumes: ["database:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U portfolio"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+volumes:
+  database:
+  media:
