@@ -1,0 +1,40 @@
+.loading {
+  padding: 100px 30px;
+  text-align: center;
+}
+.login {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(ellipse at top right, #dce5ce, transparent 60%), #f4f5ee;
+}
+.login form {
+  width: min(440px, 90vw);
+  padding: 38px;
+  background: #fffc;
+  border: 1px solid #e0e4d7;
+  border-radius: 12px;
+}
+.login h1 {
+  font-size: 32px;
+  letter-spacing: -1.5px;
+  margin-top: 30px;
+}
+.login label,
+.settings-form label {
+  display: block;
+  margin: 20px 0;
+  font-size: 13px;
+}
+.login input,
+.settings-form input {
+  margin-top: 8px;
+}
+.login button {
+  width: 100%;
+  margin: 10px 0 25px;
+}
+.login form > a {
+  font-size: 12px;
+}

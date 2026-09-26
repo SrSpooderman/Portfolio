@@ -1,0 +1,211 @@
+.admin {
+  display: flex;
+  min-height: 100vh;
+}
+.admin aside {
+  width: 235px;
+  flex-shrink: 0;
+  padding: 32px 24px;
+  background: #e9ede1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.admin aside > small {
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+.admin aside nav {
+  display: grid;
+  gap: 8px;
+  margin: 35px 0 auto;
+}
+.admin aside button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: 0;
+  text-align: left;
+  font-size: 13px;
+}
+.admin aside button.active {
+  background: #d8dfcc;
+}
+.admin aside > a:last-of-type {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+.admin-main {
+  flex: 1;
+  min-width: 0;
+  padding: 0 5% 60px;
+}
+.admin-main > header {
+  height: 90px;
+  border-bottom: 1px solid #e0e3d9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 9px;
+  letter-spacing: 1.2px;
+}
+.avatar {
+  padding: 12px 16px;
+  border-radius: 50%;
+  background: #e2e8d6;
+}
+.admin-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 45px 0 28px;
+}
+.admin-title h1 {
+  font-size: 38px;
+  letter-spacing: -1.5px;
+  margin: 15px 0;
+}
+.admin-title p {
+  font-size: 13px;
+}
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.stats > div {
+  padding: 25px;
+  background: white;
+  border: 1px solid #e1e3da;
+  border-radius: 8px;
+}
+.stats small {
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+.stats strong {
+  display: block;
+  font-size: 40px;
+  margin-top: 15px;
+  font-weight: 500;
+}
+.welcome {
+  position: relative;
+  background: #e0e7d4;
+  padding: 40px;
+  margin: 30px 0;
+  overflow: hidden;
+  border-radius: 8px;
+}
+.welcome h2 {
+  font-size: 36px;
+  margin: 20px 0;
+  letter-spacing: -1px;
+}
+.welcome p {
+  font-size: 13px;
+}
+.welcome-star {
+  position: absolute;
+  right: 6%;
+  top: 25px;
+  font-size: 210px;
+  color: #718159;
+  transform: rotate(15deg);
+}
+.welcome > *:not(.welcome-star) {
+  position: relative;
+  z-index: 1;
+}
+.page-row,
+.page-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: space-between;
+  padding: 23px 15px;
+  border-bottom: 1px solid #ddd;
+  font-size: 12px;
+}
+.page-card {
+  background: white;
+  margin: 15px 0;
+  border: 1px solid #e1e3d8;
+  border-radius: 8px;
+}
+.page-card > div {
+  margin-right: auto;
+}
+.page-card h3 {
+  margin: 0 0 8px;
+}
+.inline-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+.inline-form input {
+  flex: 1;
+  min-width: 130px;
+}
+.notice {
+  padding: 15px;
+  border: 1px solid #bbc6a9;
+  background: #edf2e6;
+  border-radius: 6px;
+  font-size: 13px;
+}
+.error {
+  color: #9c3030;
+}
+.settings-form {
+  max-width: 600px;
+}
+.settings-form p {
+  font-size: 12px;
+}
+.upload {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  border: 1px dashed #9ca88e;
+  padding: 30px;
+  border-radius: 8px;
+  background: #eff2e8;
+}
+.upload small {
+  flex: 1;
+}
+.upload input {
+  background: transparent;
+  border: 0;
+}
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 25px;
+}
+.media-grid > div {
+  background: white;
+  padding: 15px;
+  overflow: hidden;
+}
+.media-grid img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+.media-grid strong {
+  display: block;
+  font-size: 12px;
+  margin: 10px 0;
+}
+.media-grid button {
+  margin-top: 10px;
+  font-size: 11px;
+}

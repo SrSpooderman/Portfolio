@@ -1,1 +1,26 @@
-{"name":"portfolio-mvp","private":true,"type":"module","scripts":{"dev":"vite --host 0.0.0.0","build":"vite build"},"dependencies":{"@puckeditor/core":"^0.23.0","@hookform/resolvers":"^5.2.2","react-hook-form":"^7.62.0","zod":"^4.1.0","openapi-fetch":"^0.17.0","lucide-react":"^0.468.0","react":"^19.1.0","react-dom":"^19.1.0"},"devDependencies":{"vite":"^6.3.0","@vitejs/plugin-react":"^4.4.0"}}
+{
+  "name": "portfolio-mvp",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "format": "prettier --write src",
+    "format:check": "prettier --check src"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@puckeditor/core": "^0.23.0",
+    "lucide-react": "^0.468.0",
+    "openapi-fetch": "^0.17.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-hook-form": "^7.62.0",
+    "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.4.0",
+    "prettier": "^3.9.9",
+    "vite": "^6.3.0"
+  }
+}

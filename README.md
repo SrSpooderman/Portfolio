@@ -62,3 +62,7 @@ La categoría «Secciones iniciales» se ha retirado del catálogo. Los bloques 
 - `docker-compose.yml`, `.env`, `setup.py` y `smoke_test.py`: ejecución desde la raíz.
 
 Compose conserva el nombre `mvp` para reutilizar los volúmenes existentes de base de datos e imágenes.
+
+## Organización del frontend
+
+La estructura modular y las responsabilidades de cada carpeta están documentadas en [frontend/ARCHITECTURE.md](frontend/ARCHITECTURE.md). El punto de entrada es `frontend/src/main.jsx`; las pestañas están en `frontend/src/features/`, el editor en `frontend/src/editor/` y los estilos en `frontend/src/styles/`.
