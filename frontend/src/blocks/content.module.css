@@ -44,7 +44,6 @@
   .builder-grid {
     grid-template-columns: repeat(var(--columns, 3), minmax(0, 1fr));
     min-height: 80px;
-    container-type: inline-size;
   }
   .builder-container {
     min-height: 40px;

@@ -16,6 +16,8 @@ export function Grid({
       className={contentStyles["builder-grid"]}
       style={{
         display: "grid",
+        // Puck slots default to 100%; nested layouts must size to their content.
+        height: "auto",
         "--columns": Math.max(1, Math.min(12, columns)),
         "--mobile-columns": Math.max(1, Math.min(6, mobileColumns)),
         gap: num(gap),
@@ -37,11 +39,15 @@ export function Container({
       className={contentStyles["builder-container"]}
       style={{
         display: "flex",
+        // Keep the slot content-sized, including when it contains another slot.
+        height: "auto",
         flexDirection: direction,
         gap: num(gap),
         justifyContent: justify,
         alignItems: align,
-        flexWrap: "wrap",
+        // A vertical stack needs a definite available width before measuring
+        // nested grids and wrapping text. Only horizontal layouts wrap.
+        flexWrap: direction === "row" ? "wrap" : "nowrap",
       }}
     />
   );

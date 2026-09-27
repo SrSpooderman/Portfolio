@@ -23,6 +23,8 @@ Los estilos de cada funcionalidad usan CSS Modules y una capa explícita. Las pr
 
 No añadir selectores de clases internas de Puck, reglas globales de tema al final de una hoja, ni cambios de altura o de `pointer-events` para aplicar colores. Las personalizaciones del proveedor pasan por sus variables semánticas.
 
+Los slots de `Grid` y `Container` usan altura automática. El contenedor vertical usa `flex-wrap: nowrap`; el horizontal permite envolver sus elementos. El grid participa en el cálculo de anchura de su padre, sin `container-type: inline-size` (no hay consultas `@container`). Estas reglas evitan medir el texto de un grid anidado con una anchura intrínseca reducida y conservar una altura excesiva al estirarlo después.
+
 ## Secciones y documentos
 
 Tipos soportados: `Grid`, `Container`, `Heading`, `Paragraph`, `Photo`, `Button`, `Spacer` y `Section`. `Section` guarda un árbol agrupado; descomponerlo vuelve a mostrar sus bloques editables.
@@ -48,6 +50,8 @@ npm run format:check
 ```
 
 Los tests de Node comprueban contratos de temas, valores de estilo, plantillas, compresión, inserción y exportación. No se incluye una suite de navegador: la revisión visual se hace manualmente por petición del usuario.
+
+Caso manual de dimensiones: insertar un contenedor vertical, un título y después un grid de dos columnas con párrafo e imagen. Ampliar y reducir el párrafo: la fila debe ocupar la altura del elemento más alto, respetando la altura mínima configurada, y el contenedor debe sumar título, separación y grid. Revisar también el modo móvil, la página pública y que un contenedor horizontal siga envolviendo sus elementos.
 
 Para las comprobaciones aisladas de API y arranque, instalar `backend/requirements-dev.txt` en un entorno Python 3.12 y ejecutar desde la raíz:
 
