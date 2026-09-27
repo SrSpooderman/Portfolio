@@ -141,6 +141,45 @@ def validate_blocks(blocks):
             for child in children: walk(child, depth + 1)
     for block in blocks: walk(block)
 
+def linked_instance(content, current, component_id, component_name):
+    clone = json.loads(json.dumps(content))
+    current_props = current.get('props', {})
+    root_props = clone.setdefault('props', {})
+    root_props['id'] = current_props.get('id', root_props.get('id', f"{clone.get('type','Section')}-{uuid.uuid4()}"))
+    for key in ('placement', 'mobile', 'anchor'):
+        if key in current_props: root_props[key] = current_props[key]
+    root_props['linked'] = True
+    root_props['libraryId'] = component_id
+    root_props['libraryName'] = component_name
+    def refresh_children(block):
+        props = block.get('props', {})
+        for child in props.get('content', []) or []:
+            child_props = child.setdefault('props', {})
+            child_props['id'] = f"{child.get('type','Block')}-{uuid.uuid4()}"
+            refresh_children(child)
+    refresh_children(clone)
+    return clone
+
+def update_linked_instances(document, component_id, component_name, content):
+    changed = False
+    def walk(items):
+        nonlocal changed
+        next_items = []
+        for item in items:
+            props = item.get('props', {})
+            if props.get('linked') and props.get('libraryId') == component_id:
+                changed = True
+                next_items.append(linked_instance(content, item, component_id, component_name))
+                continue
+            if item.get('type') in ('Grid', 'Container', 'Section') and isinstance(props.get('content'), list):
+                children = walk(props.get('content', []))
+                if children is not props.get('content'):
+                    item = {**item, 'props': {**props, 'content': children}}
+            next_items.append(item)
+        return next_items
+    next_doc = {**document, 'content': walk(document.get('content', []))}
+    return next_doc if changed else document
+
 class Page(BaseModel):
     title: str = Field(min_length=1,max_length=100)
     slug: str = Field(pattern=r'^[a-z0-9][a-z0-9-]{0,79}$')
@@ -228,9 +267,32 @@ def create_component(body:ComponentTemplate):
 @app.patch('/api/components/{id}',dependencies=[Depends(admin)])
 def update_component(id:str,body:ComponentTemplate):
     body.validate_tree()
-    if not run('SELECT id FROM components WHERE id=:id',{'id':id}): raise HTTPException(404,'Componente no encontrado')
-    run('UPDATE components SET name=:name,content=:content,updated_at=:date WHERE id=:id',dict(id=id,name=body.name.strip(),content=json.dumps(body.content),date=now()))
-    return {'id':id,**body.model_dump()}
+    name = body.name.strip()
+    date = now()
+    content = json.dumps(body.content)
+    with engine.begin() as connection:
+        if not connection.execute(text('SELECT id FROM components WHERE id=:id'), {'id':id}).mappings().first():
+            raise HTTPException(404,'Componente no encontrado')
+        connection.execute(text('UPDATE components SET name=:name,content=:content,updated_at=:date WHERE id=:id'),
+                           dict(id=id,name=name,content=content,date=date))
+        for page in connection.execute(text('SELECT id,draft,published FROM pages')).mappings().all():
+            updates = {}
+            for key in ('draft', 'published'):
+                if not page[key]: continue
+                current = json.loads(page[key])
+                updated = update_linked_instances(current, id, name, body.content)
+                if updated != current:
+                    validate_blocks(updated.get('content', []))
+                    updates[key] = json.dumps(updated)
+            if updates:
+                params = {'id': page['id'], 'date': date, **updates}
+                if 'draft' in updates and 'published' in updates:
+                    connection.execute(text('UPDATE pages SET draft=:draft,published=:published,updated_at=:date,published_at=:date WHERE id=:id'), params)
+                elif 'draft' in updates:
+                    connection.execute(text('UPDATE pages SET draft=:draft,updated_at=:date WHERE id=:id'), params)
+                else:
+                    connection.execute(text('UPDATE pages SET published=:published,published_at=:date WHERE id=:id'), params)
+    return {'id':id,'name':name,'content':body.content}
 
 @app.delete('/api/components/{id}',dependencies=[Depends(admin)])
 def delete_component(id:str):

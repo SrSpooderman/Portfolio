@@ -99,6 +99,32 @@ class BootstrapTests(unittest.TestCase):
         invalid={'name':'Antigua','content':{'type':'Hero','props':{'id':'old'}}}
         self.assertEqual(self.client.post('/api/components',json=invalid).status_code,422)
 
+    def test_linked_sections_update_page_instances(self):
+        self.login()
+        self.client.post('/api/setup',json=PROFILE)
+        component={'type':'Container','props':{'id':'component-root','content':[{'type':'Heading','props':{'id':'component-title','text':'Antes','level':'h2'}}]}}
+        created=self.client.post('/api/components',json={'name':'Bloque enlazado','content':component})
+        self.assertEqual(created.status_code,200,created.text)
+        component_id=created.json()['id']
+        page=self.client.get('/api/pages').json()[0]
+        linked={'type':'Container','props':{'id':'placed-root','linked':True,'libraryId':component_id,'libraryName':'Bloque enlazado','content':[{'type':'Heading','props':{'id':'placed-title','text':'Antes','level':'h2'}}]}}
+        page['draft']={'root':{},'content':[linked]}
+        updated=self.client.patch('/api/pages/'+page['id'],json={'title':page['title'],'slug':page['slug'],'draft':page['draft']})
+        self.assertEqual(updated.status_code,200,updated.text)
+        self.client.post('/api/pages/'+page['id']+'/publish')
+        next_component={'type':'Container','props':{'id':'component-root','content':[{'type':'Heading','props':{'id':'component-title','text':'Después','level':'h2'}}]}}
+        patched=self.client.patch('/api/components/'+component_id,json={'name':'Bloque enlazado','content':next_component})
+        self.assertEqual(patched.status_code,200,patched.text)
+        page=self.client.get('/api/pages').json()[0]
+        public=self.client.get('/api/public/pages/home').json()['content']
+        for document in (page['draft'], page['published'], public):
+            placed=document['content'][0]
+            self.assertEqual(placed['props']['id'],'placed-root')
+            self.assertTrue(placed['props']['linked'])
+            self.assertEqual(placed['props']['libraryId'],component_id)
+            self.assertEqual(placed['props']['content'][0]['props']['text'],'Después')
+            self.assertNotEqual(placed['props']['content'][0]['props']['id'],'component-title')
+
 
 if __name__=='__main__':
     unittest.main()

@@ -10,16 +10,32 @@ export function Grid({
   gap = 24,
   rowHeight = 0,
   alignItems = "stretch",
+  layoutPreset = "custom",
+  showGuides = false,
+  reverseMobile = false,
 }) {
+  const templates = {
+    two: "repeat(2, minmax(0, 1fr))",
+    three: "repeat(3, minmax(0, 1fr))",
+    "third-left": "minmax(0, 1fr) minmax(0, 2fr)",
+    "third-right": "minmax(0, 2fr) minmax(0, 1fr)",
+  };
+  const className = [
+    contentStyles["builder-grid"],
+    showGuides && contentStyles["builder-grid-guides"],
+    reverseMobile && contentStyles["builder-grid-reverse-mobile"],
+  ]
+    .filter(Boolean)
+    .join(" ");
   return (
     <Content
-      className={contentStyles["builder-grid"]}
+      className={className}
       style={{
-        display: "grid",
         // Puck slots default to 100%; nested layouts must size to their content.
         height: "auto",
         "--columns": Math.max(1, Math.min(12, columns)),
         "--mobile-columns": Math.max(1, Math.min(6, mobileColumns)),
+        "--grid-template": templates[layoutPreset] || undefined,
         gap: num(gap),
         gridAutoRows: rowHeight ? `minmax(${num(rowHeight)}px, auto)` : "auto",
         alignItems,

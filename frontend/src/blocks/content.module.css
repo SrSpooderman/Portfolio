@@ -42,8 +42,21 @@
     font-size: inherit;
   }
   .builder-grid {
-    grid-template-columns: repeat(var(--columns, 3), minmax(0, 1fr));
+    display: grid;
+    grid-template-columns: var(
+      --grid-template,
+      repeat(var(--columns, 3), minmax(0, 1fr))
+    );
     min-height: 80px;
+  }
+  .builder-grid-guides {
+    background-image:
+      linear-gradient(to right, var(--sp-border) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--sp-border) 1px, transparent 1px);
+    background-size:
+      max(24px, calc(100% / var(--columns, 3))) 100%,
+      100% 24px;
+    background-position: -1px -1px;
   }
   .builder-container {
     min-height: 40px;
@@ -85,6 +98,10 @@
   @media (max-width: 700px) {
     .builder-grid {
       grid-template-columns: repeat(var(--mobile-columns, 1), minmax(0, 1fr));
+    }
+    .builder-grid-reverse-mobile {
+      display: flex;
+      flex-direction: column-reverse;
     }
     .builder-block {
       grid-column: var(--mobile-column, auto) / span var(--mobile-span, 1);

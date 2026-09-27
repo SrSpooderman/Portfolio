@@ -34,15 +34,30 @@ export const basic = {
     label: "Grid",
     fields: {
       content: slot,
+      layoutPreset: select("Preset", [
+        ["custom", "Manual"],
+        ["two", "2 iguales"],
+        ["three", "3 iguales"],
+        ["third-left", "1/3 + 2/3"],
+        ["third-right", "2/3 + 1/3"],
+      ]),
       columns: number("Columnas escritorio", 1, 12),
       mobileColumns: number("Columnas móvil", 1, 6),
-      gap: number("Separación (px)", 0, 200),
+      gap: number("Gap (px)", 0, 200),
       rowHeight: number("Altura mínima de fila", 0, 1000),
       alignItems: select("Alineación vertical", [
         ["stretch", "Estirar"],
         ["start", "Arriba"],
         ["center", "Centro"],
         ["end", "Abajo"],
+      ]),
+      reverseMobile: select("Orden móvil", [
+        [false, "Normal"],
+        [true, "Invertido"],
+      ]),
+      showGuides: select("Guías", [
+        [false, "Ocultas"],
+        [true, "Visibles"],
       ]),
     },
     defaultProps: blockDefaults.Grid,

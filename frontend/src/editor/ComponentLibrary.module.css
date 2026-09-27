@@ -44,6 +44,29 @@
     outline: 3px solid var(--sp-focus);
     outline-offset: 3px;
   }
+  .quick-grid {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px;
+    border: 1px solid var(--sp-border);
+    border-radius: 8px;
+    background: var(--sp-background);
+  }
+  .quick-grid button {
+    padding: 7px 9px;
+    font-size: 12px;
+  }
+  .quick-grid span {
+    min-width: 38px;
+    text-align: center;
+    color: var(--sp-muted);
+    font-size: 11px;
+  }
+  .quick-active {
+    border-color: var(--sp-focus);
+    background: var(--sp-neutralHover);
+  }
   .library-actions summary {
     cursor: pointer;
   }

@@ -1,6 +1,6 @@
 @layer components {
   .drawer {
-    margin-top: 16px;
+    margin-top: 10px;
     color: var(--sp-text);
     font-size: 14px;
   }
@@ -21,21 +21,104 @@
   .drawer p {
     font-size: 12px;
   }
+  .search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 0 0 12px;
+  }
+  .search svg {
+    position: absolute;
+    left: 12px;
+    color: var(--sp-muted);
+  }
+  .search input {
+    padding-left: 38px;
+  }
   .label {
     margin: 16px 0 8px;
     color: var(--sp-muted);
     font-size: 12px;
     font-weight: 500;
   }
+  .card-list {
+    display: grid;
+    gap: 8px;
+  }
   .card {
     border: 1px solid var(--sp-border);
     border-radius: 6px;
     padding: 12px;
-    margin-bottom: 8px;
     background: var(--sp-background);
   }
   .card:hover {
     border-color: var(--sp-focus);
+  }
+  .block-card-main,
+  .section-card-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .block-card-main strong,
+  .section-card-main strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .block-card-main small,
+  .section-card-main small {
+    display: block;
+    margin-top: 2px;
+    color: var(--sp-muted);
+    font-size: 11px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .thumbnail,
+  .section-thumb {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    border: 1px solid var(--sp-border);
+    border-radius: 6px;
+    background: var(--sp-surface);
+  }
+  .section-thumb {
+    background:
+      linear-gradient(var(--sp-border), var(--sp-border)) 50% 0 / 1px 100%
+        no-repeat,
+      var(--sp-surface);
+  }
+  .card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .icon-button {
+    display: inline-grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--sp-border);
+    border-radius: 6px;
+    background: var(--sp-background);
+    color: var(--sp-text);
+    cursor: pointer;
+  }
+  .icon-button:hover {
+    background: var(--sp-neutralHover);
+    border-color: var(--sp-focus);
+  }
+  .icon-button:focus-visible {
+    outline: 3px solid var(--sp-focus);
+    outline-offset: 2px;
   }
   .menu {
     margin-top: 8px;

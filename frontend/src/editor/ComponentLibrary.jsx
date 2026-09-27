@@ -8,8 +8,14 @@ import { libraryApi } from "../api/components";
 import { useSectionLibrary } from "./SectionLibraryContext";
 import { ExportMenu } from "../features/export/ExportMenu";
 import { SelectionBreadcrumb } from "./SelectionBreadcrumb";
-import { RotateCcw, Smartphone } from "lucide-react";
+import { Grid2X2, Minus, Plus, RotateCcw, Smartphone } from "lucide-react";
 const usePuck = createUsePuck();
+const gridPresets = [
+  ["two", "2"],
+  ["three", "3"],
+  ["third-left", "1/3"],
+  ["third-right", "2/3"],
+];
 export function ComponentLibrary() {
   const selected = usePuck((s) => s.selectedItem);
   const dispatch = usePuck((s) => s.dispatch);
@@ -45,6 +51,25 @@ export function ComponentLibrary() {
     delete block.props.mobile;
     replace(block);
   }
+  function updateSelectedProps(nextProps) {
+    if (!selected) return;
+    replace({
+      ...selected,
+      props: {
+        ...selected.props,
+        ...nextProps,
+      },
+    });
+  }
+  function setGridPreset(layoutPreset) {
+    const columns = layoutPreset === "three" ? 3 : 2;
+    updateSelectedProps({ layoutPreset, columns });
+  }
+  function changeGridGap(step) {
+    updateSelectedProps({
+      gap: Math.max(0, Math.min(200, (Number(selected.props.gap) || 0) + step)),
+    });
+  }
   return (
     <div className={styles["component-library"]}>
       <div className={styles["library-actions"]}>
@@ -67,12 +92,51 @@ export function ComponentLibrary() {
             </button>
           </>
         )}
+        {selected?.type === "Grid" && (
+          <div className={styles["quick-grid"]}>
+            <Grid2X2 size={16} />
+            {gridPresets.map(([preset, label]) => (
+              <button
+                key={preset}
+                className={
+                  ui.button +
+                  " " +
+                  (selected.props.layoutPreset === preset
+                    ? styles["quick-active"]
+                    : "")
+                }
+                onClick={() => setGridPreset(preset)}
+              >
+                {label}
+              </button>
+            ))}
+            <button className={ui.button} onClick={() => changeGridGap(-4)}>
+              <Minus size={14} />
+            </button>
+            <span>{selected.props.gap || 0}px</span>
+            <button className={ui.button} onClick={() => changeGridGap(4)}>
+              <Plus size={14} />
+            </button>
+            <button
+              className={
+                ui.button +
+                " " +
+                (selected.props.showGuides ? styles["quick-active"] : "")
+              }
+              onClick={() =>
+                updateSelectedProps({ showGuides: !selected.props.showGuides })
+              }
+            >
+              Guías
+            </button>
+          </div>
+        )}
         {selected && ["Grid", "Container"].includes(selected.type) && (
           <button
             className={ui.button}
             onClick={() => replace(compressSection(selected))}
           >
-            Comprimir sección
+            Agrupar
           </button>
         )}
         {selected && convertible.includes(selected.type) && (
@@ -80,7 +144,7 @@ export function ComponentLibrary() {
             className={ui.button}
             onClick={() => replace(decompose(selected))}
           >
-            Descomponer en elementos
+            Desagrupar
           </button>
         )}
         {selected && (

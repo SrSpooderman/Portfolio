@@ -1,7 +1,15 @@
 // Shared by the editor and the public renderer. Saved props take precedence.
 export const blockDefaults = {
   Section: { content: [] },
-  Grid: { content: [], columns: 3, mobileColumns: 1, gap: 24 },
+  Grid: {
+    content: [],
+    columns: 3,
+    mobileColumns: 1,
+    gap: 24,
+    layoutPreset: "custom",
+    showGuides: false,
+    reverseMobile: false,
+  },
   Container: {
     content: [],
     direction: "column",

@@ -28,7 +28,9 @@ Los datos e imágenes persisten en los volúmenes Docker. `docker compose down` 
 
 En **Páginas → Editar diseño** puedes añadir, mover y editar bloques. **Guardar borrador** conserva los cambios; **Previsualizar** muestra el borrador; **Publicar** actualiza la web.
 
-En **Blocks → Secciones** hay seis plantillas: presentación, sobre mí, proyectos, servicios, experiencia y contacto. No contienen imágenes. Selecciona un contenedor o grid y utiliza **⋯ → Insertar**. Puedes descomponer una sección para editar cada elemento y volver a comprimir el contenedor. También puedes guardar tus propias composiciones, editarlas y duplicarlas desde **Secciones**.
+En **Blocks** hay buscador, favoritos y categorías: estructura, texto, media, acciones y secciones. La inserción se hace dentro del contenedor o grid seleccionado y el bloque insertado queda seleccionado. El grid incluye presets de 2 columnas, 3 columnas, 1/3 + 2/3 y 2/3 + 1/3, control rápido de gap, guías visuales y orden móvil invertido.
+
+En **Blocks → Secciones** hay seis plantillas: presentación, sobre mí, proyectos, servicios, experiencia y contacto. No contienen imágenes. Selecciona un contenedor o grid y utiliza **⋯ → Insertar copia**. Las secciones guardadas también se pueden insertar como instancia enlazada; al actualizar esa sección guardada se actualizan sus instancias enlazadas en drafts y páginas publicadas. Puedes desagrupar una sección para editar cada elemento y agrupar de nuevo un contenedor o grid. También puedes guardar tus propias composiciones, editarlas y duplicarlas desde **Secciones**.
 
 **Exportar página** descarga el borrador completo. **Exportar sección** descarga la composición completa. Hay dos formatos: JSON con estructura editable y HTML con estilos. El HTML usa las URLs originales de las imágenes; el JSON incluye el identificador de paleta. No hay importación de archivos por ahora.
 

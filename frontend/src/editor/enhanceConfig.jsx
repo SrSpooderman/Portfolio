@@ -5,13 +5,24 @@ import { Box } from "../blocks/BlockBox";
 export function enhanceConfig() {
   return {
     categories: {
-      layout: { title: "Estructura y grid", components: ["Grid", "Container"] },
-      elements: {
-        title: "Elementos libres",
-        components: ["Heading", "Paragraph", "Photo", "Button", "Spacer"],
+      structure: {
+        title: "Estructura",
+        components: ["Grid", "Container"],
+      },
+      text: {
+        title: "Texto",
+        components: ["Heading", "Paragraph"],
+      },
+      media: {
+        title: "Media",
+        components: ["Photo"],
+      },
+      actions: {
+        title: "Acciones",
+        components: ["Button", "Spacer"],
       },
       sections: {
-        title: "Secciones agrupadas",
+        title: "Secciones",
         visible: false,
         components: ["Section"],
       },
