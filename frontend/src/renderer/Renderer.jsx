@@ -5,7 +5,10 @@ export function Renderer({ data }) {
   return (
     <>
       {(data?.content || []).map((block, i) => {
-        const entry = registry[block.type];
+        const entry =
+          block.type === "Section"
+            ? { render: ({ content = [] }) => <Renderer data={{ content }} /> }
+            : registry[block.type];
         if (!entry) return null;
         const props = { ...entry.defaults, ...block.props };
         for (const key of entry.slots || []) {

@@ -1,3 +1,7 @@
+import { ExportMenu } from "../export/ExportMenu";
+import { portfolioTemplates } from "./templates";
+import sectionsListStyles from "./SectionsList.module.css";
+import ui from "../../ui/primitives.module.css";
 import React from "react";
 import { request } from "../../api/components";
 import { cloneBlock } from "../../blocks/transforms";
@@ -12,34 +16,72 @@ export function SectionsList({
 }) {
   return (
     <>
-      <p>
-        Crea secciones con grids, textos, imágenes y botones. Cada sección es
-        una composición reutilizable; las copias insertadas en páginas se editan
-        de forma independiente.
-      </p>
       <button
-        className="primary"
-        onClick={() => open({ name: "Nueva sección", content: emptySection() })}
+        className={ui["button"] + " " + ui["primary"]}
+        onClick={() =>
+          open({
+            name: "Nueva sección",
+            content: emptySection(),
+          })
+        }
       >
         Crear sección +
       </button>
       {message && (
-        <p className="notice" role="status">
+        <p className={ui["p"] + " " + ui["notice"]} role="status">
           {message}
         </p>
       )}
-      <div className="sections-list">
+      <h2 className={ui.h2}>Secciones base</h2>
+      <div className={sectionsListStyles["sections-list"]}>
+        {portfolioTemplates.map((template) => (
+          <article className={ui["page-card"]} key={template.id}>
+            <h3 className={ui.h3}>{template.name}</h3>
+            <button
+              className={ui.button}
+              onClick={() =>
+                open({
+                  name: template.name,
+                  content: cloneBlock(template.content),
+                })
+              }
+            >
+              Usar plantilla
+            </button>
+            <ExportMenu
+              data={{
+                root: {},
+                content: [template.content],
+              }}
+              name={template.name}
+              kind="section"
+            />
+          </article>
+        ))}
+      </div>
+      <h2 className={ui.h2}>Guardadas</h2>
+      <div className={sectionsListStyles["sections-list"]}>
         {sections.map((section) => (
-          <article className="page-card" key={section.id}>
+          <article className={ui["page-card"]} key={section.id}>
             <div>
-              <h3>{section.name}</h3>
-              <small>
+              <h3 className={ui["h3"]}>{section.name}</h3>
+              <small className={ui["small"]}>
                 {section.updated_at
                   ? `Actualizada ${new Date(section.updated_at).toLocaleString("es")}`
                   : ""}
               </small>
             </div>
-            <button onClick={() => open(section)}>Editar sección</button>
+            <ExportMenu
+              data={{
+                root: {},
+                content: [section.content],
+              }}
+              name={section.name}
+              kind="section"
+            />
+            <button onClick={() => open(section)} className={ui["button"]}>
+              Editar sección
+            </button>
             <button
               disabled={busy}
               onClick={() =>
@@ -51,6 +93,7 @@ export function SectionsList({
                   await refresh();
                 })
               }
+              className={ui["button"]}
             >
               Duplicar
             </button>
@@ -67,6 +110,7 @@ export function SectionsList({
                     await refresh();
                   });
               }}
+              className={ui["button"]}
             >
               Eliminar
             </button>
@@ -74,10 +118,7 @@ export function SectionsList({
         ))}
       </div>
       {!sections.length && (
-        <p>
-          Aún no hay secciones. Crea la primera y diseña su contenido en el
-          editor.
-        </p>
+        <p className={ui["p"]}>No hay secciones guardadas.</p>
       )}
     </>
   );

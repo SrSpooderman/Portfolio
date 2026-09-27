@@ -1,0 +1,36 @@
+@value public as ref_public from "../blocks/content.module.css";
+@layer components {
+  .editor-toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+    flex-wrap: wrap;
+    background: var(--sp-surface);
+  }
+  .editor-toolbar span {
+    font-size: 12px;
+  }
+  .editor-toolbar strong {
+    margin-right: auto;
+  }
+  .editor .ref_public {
+    background: var(--sp-background);
+  }
+  .section-editor {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: var(--sp-background);
+    overflow: auto;
+  }
+  .section-editor .editor-toolbar input {
+    max-width: 320px;
+  }
+  @media (max-width: 650px) {
+    .editor-toolbar button {
+      font-size: 11px;
+      padding: 8px;
+    }
+  }
+}

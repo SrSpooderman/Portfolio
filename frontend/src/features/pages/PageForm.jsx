@@ -1,3 +1,5 @@
+import ui from "../../ui/primitives.module.css";
+import pageFormStyles from "./PageForm.module.css";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,22 +18,27 @@ export function PageForm({ onSave, busy }) {
     ),
   });
   return (
-    <form className="inline-form" onSubmit={handleSubmit(onSave)}>
+    <form
+      className={pageFormStyles["inline-form"]}
+      onSubmit={handleSubmit(onSave)}
+    >
       <input
         placeholder="Nombre de página"
         aria-label="Nombre"
         {...register("title")}
+        className={ui["input"]}
       />
       <input
         placeholder="slug-de-pagina"
         aria-label="Slug"
         {...register("slug")}
+        className={ui["input"]}
       />
-      <button className="primary" disabled={busy}>
+      <button className={ui["button"] + " " + ui["primary"]} disabled={busy}>
         Crear página +
       </button>
       {Object.keys(errors).length > 0 && (
-        <small role="alert">
+        <small role="alert" className={ui["small"]}>
           Introduce un nombre y un slug con letras minúsculas, números o
           guiones.
         </small>

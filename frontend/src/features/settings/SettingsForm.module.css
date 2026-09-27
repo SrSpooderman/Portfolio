@@ -1,0 +1,16 @@
+@layer components {
+  .settings-form > label {
+    display: block;
+    margin: 20px 0;
+    font-size: 13px;
+  }
+  .settings-form > label > input {
+    margin-top: 8px;
+  }
+  .settings-form {
+    max-width: 600px;
+  }
+  .settings-form p {
+    font-size: 12px;
+  }
+}

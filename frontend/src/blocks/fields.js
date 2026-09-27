@@ -51,6 +51,7 @@ const positionFields = {
   row: number("Fila inicial (0 = automática)", 0, 100),
 };
 export const common = {
+  anchor: text("Ancla de enlace (sin #)"),
   appearance: object("Estilos", styleFields),
   placement: object("Posición en el grid", positionFields),
   mobile: object("Móvil (hasta 700 px)", {

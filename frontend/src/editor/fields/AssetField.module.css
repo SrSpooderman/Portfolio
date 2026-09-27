@@ -1,0 +1,27 @@
+@layer components {
+  .asset-field {
+    display: grid;
+    gap: 10px;
+  }
+  .asset-field img {
+    max-width: 100%;
+    max-height: 140px;
+    object-fit: contain;
+  }
+  .asset-field input {
+    width: 100%;
+    min-width: 0;
+    font-size: 12px;
+  }
+  .asset-field select {
+    width: 100%;
+    min-width: 0;
+    font-size: 12px;
+  }
+  .asset-field label {
+    font-size: 12px;
+  }
+  .asset-field button {
+    font-size: 12px;
+  }
+}

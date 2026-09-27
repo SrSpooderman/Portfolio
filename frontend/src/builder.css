@@ -1,1 +1,2 @@
-@import "./styles/builder.css";
+/* Compatibility entry. Content styles are owned by CSS Modules. */
+@import "./styles/index.css";

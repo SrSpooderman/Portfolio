@@ -1,3 +1,4 @@
+import ui from "../../ui/primitives.module.css";
 import React, { useEffect, useState } from "react";
 import { api } from "../../api/client";
 import { PageForm } from "./PageForm";
@@ -23,10 +24,10 @@ export function PagesPanel({
         }
       />
       {pages.map((p) => (
-        <div className="page-card" key={p.id}>
+        <div className={ui["page-card"]} key={p.id}>
           <div>
-            <h3>{p.title}</h3>
-            <small>
+            <h3 className={ui["h3"]}>{p.title}</h3>
+            <small className={ui["small"]}>
               /{p.slug === "home" ? "" : p.slug} ·{" "}
               {p.published ? "Publicada" : "Borrador"}
             </small>
@@ -37,6 +38,7 @@ export function PagesPanel({
               setDraft(p.draft);
               setMessage("");
             }}
+            className={ui["button"]}
           >
             Editar diseño ↗
           </button>
@@ -49,6 +51,7 @@ export function PagesPanel({
                 setMessage("Página publicada");
               })
             }
+            className={ui["button"]}
           >
             Publicar borrador
           </button>
@@ -62,6 +65,7 @@ export function PagesPanel({
                     await refresh();
                   });
               }}
+              className={ui["button"]}
             >
               Eliminar
             </button>

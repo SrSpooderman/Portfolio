@@ -1,3 +1,5 @@
+import ui from "../../ui/primitives.module.css";
+import contentStyles from "../../blocks/content.module.css";
 import React, { useEffect, useState } from "react";
 import { api } from "../../api/client";
 import { Renderer } from "../../renderer/Renderer";
@@ -13,38 +15,47 @@ export function Public({ site }) {
       .catch((e) => setError(e.message));
   }, []);
   return (
-    <div className="public">
-      <header className="public-header">
-        <a href="/" className="brand">
+    <div className={contentStyles["public"]}>
+      <header className={contentStyles["public-header"]}>
+        <a href="/" className={ui["a"] + " " + ui["brand"]}>
           {site.name}
-          <span>®</span>
         </a>
         <nav>
-          <a href="/#proyectos">Proyectos</a>
-          <a href="/#sobre-mi">Sobre mí</a>
-          <a className="nav-contact" href="/#contacto">
-            Hablemos ↗
+          <a href="/#proyectos" className={ui["a"]}>
+            Proyectos
+          </a>
+          <a href="/#sobre-mi" className={ui["a"]}>
+            Sobre mí
+          </a>
+          <a
+            className={ui["a"] + " " + contentStyles["nav-contact"]}
+            href="/#contacto"
+          >
+            Contacto
           </a>
         </nav>
       </header>
       <main>
         {error ? (
-          <div className="loading">
-            <h1>{error}</h1>
-            <a href="/">Volver al inicio</a>
+          <div className={ui["loading"]}>
+            <h1 className={ui["h1"]}>{error}</h1>
+            <a href="/" className={ui["a"]}>
+              Volver al inicio
+            </a>
           </div>
         ) : page ? (
           <Renderer data={page.content} />
         ) : (
-          <div className="loading">Cargando…</div>
+          <div className={ui["loading"]}>Cargando…</div>
         )}
       </main>
-      <footer>
+      <footer className={ui["footer"]}>
         <span>
           © {new Date().getFullYear()} {site.name}
         </span>
-        <span>Diseñado con intención.</span>
-        <a href="/admin">Administración ↗</a>
+        <a href="/admin" className={ui["a"]}>
+          Administración
+        </a>
       </footer>
     </div>
   );

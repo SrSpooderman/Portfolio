@@ -1,3 +1,5 @@
+import ui from "../../ui/primitives.module.css";
+import assetFieldStyles from "./AssetField.module.css";
 import React, { useEffect, useState } from "react";
 import { safe } from "../../shared/urls";
 export function AssetField({ value, onChange, name }) {
@@ -15,13 +17,14 @@ export function AssetField({ value, onChange, name }) {
     refresh();
   }, []);
   return (
-    <div className="asset-field">
+    <div className={assetFieldStyles["asset-field"]}>
       <label>
         URL de imagen
         <input
           aria-label={name || "URL de imagen"}
           value={value || ""}
           onChange={(e) => onChange(e.target.value)}
+          className={ui["input"]}
         />
       </label>
       {value && <img src={safe(value)} alt="Vista previa" />}
@@ -29,6 +32,7 @@ export function AssetField({ value, onChange, name }) {
         aria-label="Seleccionar de la biblioteca"
         value={assets.some((a) => a.url === value) ? value : ""}
         onChange={(e) => onChange(e.target.value)}
+        className={ui["select"]}
       >
         <option value="">Seleccionar de la biblioteca…</option>
         {assets.map((a) => (
@@ -51,7 +55,10 @@ export function AssetField({ value, onChange, name }) {
             try {
               const body = new FormData();
               body.append("file", file);
-              const r = await fetch("/api/assets", { method: "POST", body });
+              const r = await fetch("/api/assets", {
+                method: "POST",
+                body,
+              });
               if (!r.ok) throw Error("No se pudo subir (máximo 10 MB)");
               const a = await r.json();
               onChange(a.url);
@@ -62,12 +69,21 @@ export function AssetField({ value, onChange, name }) {
               setBusy(false);
             }
           }}
+          className={ui["input"]}
         />
       </label>
-      <button type="button" onClick={() => onChange("")}>
+      <button
+        type="button"
+        onClick={() => onChange("")}
+        className={ui["button"]}
+      >
         Quitar imagen
       </button>
-      {error && <p role="alert">{error}</p>}
+      {error && (
+        <p role="alert" className={ui["p"]}>
+          {error}
+        </p>
+      )}
     </div>
   );
 }

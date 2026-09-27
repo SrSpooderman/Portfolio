@@ -1,0 +1,38 @@
+/* Puck 0.23 public semantic tokens. No internal classes or interaction geometry. */
+@layer adapter {
+  :root {
+    --puck-color-surface: var(--sp-background);
+    --puck-color-surface-muted: var(--sp-surface);
+    --puck-color-surface-subtle: var(--sp-surface);
+    --puck-color-surface-inverse: var(--sp-text);
+    --puck-color-border: var(--sp-border);
+    --puck-color-border-muted: var(--sp-border);
+    --puck-color-border-hover: var(--sp-focus);
+    --puck-color-border-inverse: var(--sp-muted);
+    --puck-color-text: var(--sp-text);
+    --puck-color-text-secondary: var(--sp-muted);
+    --puck-color-text-muted: var(--sp-muted);
+    --puck-color-text-subtle: var(--sp-muted);
+    --puck-color-text-inverse: var(--sp-background);
+    --puck-color-interactive: var(--sp-accent);
+    --puck-color-interactive-hover: var(--sp-hover);
+    --puck-color-interactive-active: var(--sp-active);
+    --puck-color-interactive-subtle: var(--sp-selected);
+    --puck-color-interactive-soft: var(--sp-selected);
+    --puck-color-interactive-soft-hover: var(--sp-neutralHover);
+    --puck-color-interactive-neutral-hover: var(--sp-neutralHover);
+    --puck-color-interactive-inverse-hover: var(--sp-focus);
+    --puck-color-interactive-inverse-active: var(--sp-focus);
+    --puck-color-focus-ring: var(--sp-focus);
+    --puck-color-selection-bg: var(--sp-selectionOverlay);
+    --puck-color-selection-border: var(--sp-focus);
+    --puck-color-line-placeholder: var(--sp-focus);
+    --puck-color-highlight: var(--sp-focus);
+    --puck-color-bg-disabled: var(--sp-disabledBg);
+    --puck-color-text-disabled: var(--sp-disabledText);
+    --puck-color-overlay-backdrop: var(--sp-backdrop);
+    --puck-button-primary-color-text: var(--sp-onAccent);
+    --puck-button-primary-color-text-hover: var(--sp-onAccent);
+    --puck-button-primary-color-text-active: var(--sp-onAccent);
+  }
+}

@@ -1,3 +1,5 @@
+import { blockDefaults } from "../blocks/defaults";
+import { Renderer } from "../renderer/Renderer";
 import React, { useEffect, useState } from "react";
 import { text, number, select, slot } from "../blocks/fields";
 import {
@@ -7,6 +9,7 @@ import {
   Heading,
   Paragraph,
   Button,
+  Spacer,
 } from "../blocks/primitives";
 import { AssetField } from "./fields/AssetField";
 const imageField = {
@@ -15,8 +18,20 @@ const imageField = {
   render: (props) => <AssetField {...props} />,
 };
 export const basic = {
+  Section: {
+    label: "Sección agrupada",
+    fields: {},
+    defaultProps: blockDefaults.Section,
+    render: ({ content = [] }) => (
+      <Renderer
+        data={{
+          content,
+        }}
+      />
+    ),
+  },
   Grid: {
-    label: "Grid libre",
+    label: "Grid",
     fields: {
       content: slot,
       columns: number("Columnas escritorio", 1, 12),
@@ -30,7 +45,7 @@ export const basic = {
         ["end", "Abajo"],
       ]),
     },
-    defaultProps: { content: [], columns: 3, mobileColumns: 1, gap: 24 },
+    defaultProps: blockDefaults.Grid,
     render: Grid,
   },
   Container: {
@@ -55,18 +70,16 @@ export const basic = {
         ["flex-end", "Final"],
       ]),
     },
-    defaultProps: {
-      content: [],
-      direction: "column",
-      gap: 20,
-      appearance: { padding: 24 },
-    },
+    defaultProps: blockDefaults.Container,
     render: Container,
   },
   Heading: {
     label: "Título",
     fields: {
-      text: { type: "textarea", label: "Texto" },
+      text: {
+        type: "textarea",
+        label: "Texto",
+      },
       level: select("Nivel", [
         ["h1", "H1"],
         ["h2", "H2"],
@@ -74,17 +87,22 @@ export const basic = {
         ["h4", "H4"],
       ]),
     },
-    defaultProps: { text: "Tu título", level: "h2" },
+    defaultProps: blockDefaults.Heading,
     render: Heading,
   },
   Paragraph: {
     label: "Párrafo",
-    fields: { text: { type: "textarea", label: "Texto" } },
-    defaultProps: { text: "Escribe tu historia." },
+    fields: {
+      text: {
+        type: "textarea",
+        label: "Texto",
+      },
+    },
+    defaultProps: blockDefaults.Paragraph,
     render: Paragraph,
   },
   Photo: {
-    label: "Imagen libre",
+    label: "Imagen",
     fields: {
       src: imageField,
       alt: text("Descripción accesible"),
@@ -95,7 +113,7 @@ export const basic = {
       ]),
       link: text("Enlace opcional"),
     },
-    defaultProps: { src: "", alt: "", height: 300, fit: "cover" },
+    defaultProps: blockDefaults.Photo,
     render: Photo,
   },
   Button: {
@@ -107,19 +125,15 @@ export const basic = {
       color: text("Color"),
       radius: number("Radio", 0, 200),
     },
-    defaultProps: {
-      label: "Hablemos ↗",
-      url: "#contacto",
-      background: "#292f25",
-      color: "#ffffff",
-      radius: 30,
-    },
+    defaultProps: blockDefaults.Button,
     render: Button,
   },
-  Decoration: {
-    label: "Retirado",
-    fields: {},
-    defaultProps: {},
-    render: () => null,
+  Spacer: {
+    label: "Espaciador",
+    fields: {
+      height: number("Altura (px)", 0, 400),
+    },
+    defaultProps: blockDefaults.Spacer,
+    render: Spacer,
   },
 };

@@ -1,4 +1,4 @@
-import { defaults, components } from "../blocks/legacy";
+import { blockDefaults } from "../blocks/defaults";
 import {
   Grid,
   Container,
@@ -6,44 +6,37 @@ import {
   Heading,
   Paragraph,
   Button,
+  Spacer,
 } from "../blocks/primitives";
 export const registry = {
-  ...Object.fromEntries(
-    Object.entries(components).map(([type, render]) => [
-      type,
-      { render, defaults: defaults[type] },
-    ]),
-  ),
   Grid: {
     render: Grid,
     slots: ["content"],
-    defaults: { content: [], columns: 3, mobileColumns: 1, gap: 24 },
+    defaults: blockDefaults.Grid,
   },
   Container: {
     render: Container,
     slots: ["content"],
-    defaults: {
-      content: [],
-      direction: "column",
-      gap: 20,
-      appearance: { padding: 24 },
-    },
+    defaults: blockDefaults.Container,
   },
   Photo: {
     render: Photo,
-    defaults: { src: "", alt: "", height: 300, fit: "cover" },
+    defaults: blockDefaults.Photo,
   },
-  Heading: { render: Heading, defaults: { text: "Tu título", level: "h2" } },
-  Paragraph: { render: Paragraph, defaults: { text: "Escribe tu historia." } },
+  Heading: {
+    render: Heading,
+    defaults: blockDefaults.Heading,
+  },
+  Paragraph: {
+    render: Paragraph,
+    defaults: blockDefaults.Paragraph,
+  },
   Button: {
     render: Button,
-    defaults: {
-      label: "Hablemos ↗",
-      url: "#contacto",
-      background: "#292f25",
-      color: "#ffffff",
-      radius: 30,
-    },
+    defaults: blockDefaults.Button,
   },
-  Decoration: { render: () => null },
+  Spacer: {
+    render: Spacer,
+    defaults: blockDefaults.Spacer,
+  },
 };

@@ -1,3 +1,5 @@
+import ui from "../ui/primitives.module.css";
+import adminLayoutStyles from "./AdminLayout.module.css";
 import React, { useEffect, useState } from "react";
 import {
   LayoutDashboard,
@@ -18,12 +20,11 @@ export function AdminLayout({
   children,
 }) {
   return (
-    <div className="admin">
+    <div className={adminLayoutStyles["admin"]}>
       <aside>
-        <a className="brand" href="/">
-          studio<span>®</span>
+        <a className={ui["a"] + " " + ui["brand"]} href="/">
+          SpiderPortfolio
         </a>
-        <small>YOUR PORTFOLIO, YOUR RULES</small>
         <nav>
           {[
             ["dashboard", "Resumen", LayoutDashboard],
@@ -34,7 +35,11 @@ export function AdminLayout({
           ].map(([id, label, Icon]) => (
             <button
               key={id}
-              className={tab === id ? "active" : ""}
+              className={
+                ui["button"] +
+                " " +
+                (tab === id ? adminLayoutStyles["active"] : "")
+              }
               onClick={() => {
                 setTab(id);
                 setMessage("");
@@ -45,7 +50,7 @@ export function AdminLayout({
             </button>
           ))}
         </nav>
-        <a href="/" target="_blank" rel="noreferrer">
+        <a href="/" target="_blank" rel="noreferrer" className={ui["a"]}>
           Ver portfolio <ArrowUpRight size={16} />
         </a>
         <button
@@ -55,37 +60,40 @@ export function AdminLayout({
               setAuth(false);
             })
           }
+          className={ui["button"]}
         >
           <LogOut size={16} /> Cerrar sesión
         </button>
       </aside>
-      <main className="admin-main">
+      <main className={adminLayoutStyles["admin-main"]}>
         <header>
-          <span>ESPACIO DE TRABAJO / {tab.toUpperCase()}</span>
-          <span className="avatar">A</span>
+          <span>SpiderPortfolio</span>
         </header>
-        <div className="admin-title">
+        <div className={adminLayoutStyles["admin-title"]}>
           <div>
-            <span className="eyebrow">TU ESTUDIO DIGITAL</span>
-            <h1>
+            <h1 className={ui["h1"]}>
               {tab === "dashboard"
-                ? "Hola, vamos a crear."
+                ? "Resumen"
                 : tab === "pages"
-                  ? "Tus páginas."
+                  ? "Páginas"
                   : tab === "sections"
-                    ? "Tus secciones."
+                    ? "Secciones"
                     : tab === "media"
-                      ? "Biblioteca visual."
-                      : "Los pequeños detalles."}
+                      ? "Imágenes"
+                      : "Configuración"}
             </h1>
-            <p>Un lugar para construir, editar y compartir tu trabajo.</p>
           </div>
-          <a className="pill" href="/" target="_blank" rel="noreferrer">
+          <a
+            className={ui["a"] + " " + ui["pill"]}
+            href="/"
+            target="_blank"
+            rel="noreferrer"
+          >
             Ver web ↗
           </a>
         </div>
         {message && (
-          <p className="notice" role="status">
+          <p className={ui["p"] + " " + ui["notice"]} role="status">
             {message}
           </p>
         )}

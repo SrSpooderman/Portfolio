@@ -1,3 +1,5 @@
+import ui from "../ui/primitives.module.css";
+import contentStyles from "./content.module.css";
 import React, { useEffect, useState } from "react";
 import { num } from "../shared/numbers";
 import { safe } from "../shared/urls";
@@ -11,7 +13,7 @@ export function Grid({
 }) {
   return (
     <Content
-      className="builder-grid"
+      className={contentStyles["builder-grid"]}
       style={{
         display: "grid",
         "--columns": Math.max(1, Math.min(12, columns)),
@@ -32,7 +34,7 @@ export function Container({
 }) {
   return (
     <Content
-      className="builder-container"
+      className={contentStyles["builder-container"]}
       style={{
         display: "flex",
         flexDirection: direction,
@@ -57,31 +59,60 @@ export function Photo({ src, alt, fit = "cover", height = 300, link }) {
       }}
     />
   ) : (
-    <div className="image-placeholder">Selecciona una imagen</div>
+    <div className={contentStyles["image-placeholder"]}>
+      Selecciona una imagen
+    </div>
   );
-  return link ? <a href={safe(link)}>{image}</a> : image;
+  return link ? (
+    <a href={safe(link)} className={ui["a"]}>
+      {image}
+    </a>
+  ) : (
+    image
+  );
 }
 export function Heading({ text, level = "h2" }) {
   const Tag = ["h1", "h2", "h3", "h4"].includes(level) ? level : "h2";
-  return <Tag className="builder-heading">{text}</Tag>;
+  return <Tag className={contentStyles["builder-heading"]}>{text}</Tag>;
 }
 export function Paragraph({ text }) {
-  return <p className="builder-paragraph">{text}</p>;
+  return (
+    <p className={ui["p"] + " " + contentStyles["builder-paragraph"]}>{text}</p>
+  );
 }
 export function Button({
   label,
   url,
-  background = "#292f25",
-  color = "#ffffff",
+  background = "",
+  color = "",
   radius = 30,
 }) {
   return (
     <a
-      className="builder-button"
-      style={{ background, color, borderRadius: num(radius) }}
+      className={ui["a"] + " " + contentStyles["builder-button"]}
+      style={{
+        "--button-bg": background || undefined,
+        "--button-color": color || undefined,
+        "--button-hover": background
+          ? `color-mix(in srgb, ${background} 85%, ${color || "currentColor"})`
+          : undefined,
+        "--button-active": background
+          ? `color-mix(in srgb, ${background} 70%, ${color || "currentColor"})`
+          : undefined,
+        "--button-radius": `${num(radius)}px`,
+      }}
       href={safe(url)}
     >
       {label}
     </a>
+  );
+}
+
+export function Spacer({ height = 64 }) {
+  return (
+    <div
+      aria-hidden="true"
+      style={{ height: Math.min(400, Math.max(0, num(height))) }}
+    />
   );
 }

@@ -1,0 +1,12 @@
+@layer components {
+  .inline-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 30px;
+  }
+  .inline-form input {
+    flex: 1;
+    min-width: 130px;
+  }
+}

@@ -1,0 +1,29 @@
+@layer components {
+  .component-library {
+    padding: 10px 18px;
+    background: var(--sp-surface);
+    color: var(--sp-text);
+    border-bottom: 1px solid var(--sp-border);
+  }
+  .library-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .library-actions span {
+    font-size: 12px;
+  }
+  .library-actions summary {
+    cursor: pointer;
+  }
+  .save-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .save-form input {
+    width: min(240px, 100%);
+  }
+}

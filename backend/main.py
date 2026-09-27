@@ -1,14 +1,17 @@
+from typing import Literal
 import os, secrets, hashlib, hmac, io, uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Request, Response, Depends, UploadFile
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import create_engine, text
 from itsdangerous import URLSafeTimedSerializer, BadSignature
 from PIL import Image
 import json
+from bootstrap import initialize_content, public_settings
+from content_migration import BLOCK_TYPES, populate_starter
 
 engine = create_engine(os.getenv('DATABASE_URL', 'sqlite:///./portfolio.db'))
 media = Path(os.getenv('MEDIA_PATH', './media')); media.mkdir(parents=True, exist_ok=True)
@@ -38,13 +41,9 @@ async def lifespan(app):
         if len(password) < 12: raise RuntimeError('SUPERADMIN_PASSWORD necesita al menos 12 caracteres')
         salt = secrets.token_hex(16)
         run('INSERT INTO users VALUES (:name,:salt,:hash)', dict(name='superadmin', salt=salt, hash=password_hash(password,salt)))
-    if not run('SELECT id FROM settings'):
-        run('INSERT INTO settings VALUES (1,:content)', {'content':json.dumps({'name':'Alex Morgan','profession':'Diseñador & desarrollador','email':'hola@example.com','title':'Alex Morgan — Portfolio','description':'Diseño y desarrollo de experiencias digitales.'})})
-    if not run('SELECT id FROM pages'):
-        seed = Path(__file__).with_name('seed.json').read_text()
-        run('INSERT INTO pages VALUES (:id,:slug,:title,:draft,:published,:updated,:date)', dict(id=uuid.uuid4().hex,slug='home',title='Inicio',draft=seed,published=seed,updated=now(),date=now()))
+    initialize_content(engine, now)
     yield
-app = FastAPI(title='Portfolio MVP', lifespan=lifespan, docs_url='/api/docs', openapi_url='/api/openapi.json')
+app = FastAPI(title='SpiderPortfolio', lifespan=lifespan, docs_url='/api/docs', openapi_url='/api/openapi.json')
 app.mount('/media', StaticFiles(directory=media), name='media')
 
 @app.middleware('http')
@@ -78,18 +77,70 @@ def logout(response: Response):
     response.delete_cookie('session'); return {'ok':True}
 @app.get('/api/auth/me',dependencies=[Depends(admin)])
 def me(): return {'name':'superadmin'}
+def stored_settings(): return json.loads(run('SELECT content FROM settings WHERE id=1')[0]['content'])
 @app.get('/api/public/site')
 @app.get('/api/settings',dependencies=[Depends(admin)])
-def settings(): return json.loads(run('SELECT content FROM settings WHERE id=1')[0]['content'])
+def settings(): return public_settings(stored_settings())
 class Settings(BaseModel):
+    theme: Literal['linen','glacier','graphite','crimson'] = 'linen'
     name: str = Field(min_length=1,max_length=100)
     profession: str = Field(max_length=150)
-    email: str = Field(max_length=200)
+    email: str = Field(min_length=3,max_length=200,pattern=r'^[^\s@]+@[^\s@]+\.[^\s@]+$')
     title: str = Field(max_length=200)
     description: str = Field(max_length=500)
+
+    @field_validator('name','profession','email','title','description', mode='before')
+    @classmethod
+    def strip_text(cls, value):
+        return value.strip() if isinstance(value, str) else value
+
 @app.patch('/api/settings',dependencies=[Depends(admin)])
 def save_settings(body:Settings):
-    run('UPDATE settings SET content=:content WHERE id=1',{'content':body.model_dump_json()}); return body
+    if not stored_settings().get('setup_completed'):
+        raise HTTPException(409, 'Completa la configuración inicial')
+    value = {**body.model_dump(), 'setup_completed': True}
+    run('UPDATE settings SET content=:content WHERE id=1', {'content':json.dumps(value)})
+    return public_settings(value)
+
+@app.post('/api/setup',dependencies=[Depends(admin)])
+def complete_setup(body:Settings):
+    profile = {**body.model_dump(), 'setup_completed': True}
+    profile['title'] = profile['title'] or profile['name']
+    with engine.begin() as connection:
+        # Compare-and-set makes two simultaneous setup submissions harmless.
+        raw = connection.execute(text('SELECT content FROM settings WHERE id=1')).scalar_one()
+        if json.loads(raw).get('setup_completed'):
+            raise HTTPException(409, 'La configuración inicial ya está completada')
+        changed = connection.execute(text('UPDATE settings SET content=:content WHERE id=1 AND content=:old'),
+                                     {'content':json.dumps(profile), 'old':raw})
+        if changed.rowcount != 1:
+            raise HTTPException(409, 'La configuración inicial ya está completada')
+        home = connection.execute(text("SELECT id,draft FROM pages WHERE slug='home'")).mappings().first()
+        if home:
+            draft = json.loads(home['draft'])
+            if draft.get('root', {}).get('props', {}).get('starter'):
+                content = json.dumps(populate_starter(draft, profile))
+                connection.execute(text('UPDATE pages SET draft=:content,published=:content,'
+                                        'updated_at=:date,published_at=:date WHERE id=:id'),
+                                   {'content':content,'date':now(),'id':home['id']})
+    return public_settings(profile)
+
+def validate_blocks(blocks):
+    ids = set()
+    def walk(block, depth=0):
+        if depth > 20 or not isinstance(block, dict) or block.get('type') not in BLOCK_TYPES or not isinstance(block.get('props'), dict):
+            raise HTTPException(422, 'Estructura de bloque no válida')
+        props = block['props']
+        id = props.get('id')
+        if not isinstance(id, str) or not id or id in ids:
+            raise HTTPException(422, 'Identificadores de bloque no válidos')
+        ids.add(id)
+        if block['type'] in ('Grid', 'Container', 'Section'):
+            children = props.get('content', [])
+            if not isinstance(children, list): raise HTTPException(422, 'El contenido debe ser una lista')
+            for child in children: walk(child, depth + 1)
+    for block in blocks: walk(block)
+
 class Page(BaseModel):
     title: str = Field(min_length=1,max_length=100)
     slug: str = Field(pattern=r'^[a-z0-9][a-z0-9-]{0,79}$')
@@ -97,6 +148,7 @@ class Page(BaseModel):
     def validate_content(self):
         if self.slug in ('admin','api','media'): raise HTTPException(422,'Slug reservado')
         if not isinstance(self.draft.get('content'),list) or len(json.dumps(self.draft))>1000000: raise HTTPException(422,'Contenido no válido')
+        validate_blocks(self.draft['content'])
 def get_page(id):
     rows=run('SELECT * FROM pages WHERE id=:id',{'id':id})
     if not rows: raise HTTPException(404,'Página no encontrada')
@@ -128,6 +180,7 @@ def publish(id:str):
     get_page(id); run('UPDATE pages SET published=draft,published_at=:date WHERE id=:id',{'id':id,'date':now()}); return get_page(id)
 @app.get('/api/public/pages/{slug}')
 def public_page(slug:str):
+    if not stored_settings().get('setup_completed'): raise HTTPException(404,'Portfolio pendiente de configuración')
     rows=run('SELECT title,published FROM pages WHERE slug=:slug AND published IS NOT NULL',{'slug':slug})
     if not rows: raise HTTPException(404,'Página no publicada')
     return {'title':rows[0]['title'],'content':json.loads(rows[0]['published'])}
@@ -159,20 +212,7 @@ class ComponentTemplate(BaseModel):
     def validate_tree(self):
         if not self.name.strip(): raise HTTPException(422,'El nombre no puede estar vacío')
         if len(json.dumps(self.content)) > 1000000: raise HTTPException(422,'Componente demasiado grande')
-        allowed={'Hero','About','Projects','Text','Skills','Contact','Image','Spacer','CTA','Grid','Container','Heading','Paragraph','Photo','Button','Decoration'}
-        ids=set()
-        def walk(node,depth=0):
-            if depth>20 or not isinstance(node,dict) or node.get('type') not in allowed or not isinstance(node.get('props'),dict):
-                raise HTTPException(422,'Estructura de componente no válida')
-            props=node['props']
-            id=props.get('id')
-            if not isinstance(id,str) or not id or id in ids: raise HTTPException(422,'Identificadores de bloque no válidos')
-            ids.add(id)
-            if node['type'] in ('Grid','Container'):
-                children=props.get('content',[])
-                if not isinstance(children,list): raise HTTPException(422,'El contenido debe ser una lista')
-                for child in children: walk(child,depth+1)
-        walk(self.content)
+        validate_blocks([self.content])
 
 @app.get('/api/components',dependencies=[Depends(admin)])
 def list_components():

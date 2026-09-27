@@ -1,3 +1,5 @@
+import { SetupScreen } from "../setup/SetupScreen";
+import ui from "../../ui/primitives.module.css";
 import React, { useEffect, useState } from "react";
 import { api } from "../../api/client";
 import { useAdmin } from "./useAdmin";
@@ -30,8 +32,19 @@ export function Admin({ site, setSite }) {
     action,
     save,
   } = useAdmin();
-  if (auth === null) return <div className="loading">Comprobando sesión…</div>;
+  if (auth === null)
+    return <div className={ui["loading"]}>Comprobando sesión…</div>;
   if (!auth) return <Login onLogin={() => setAuth(true)} />;
+  if (site.setup_required)
+    return (
+      <SetupScreen
+        site={site}
+        onComplete={(next) => {
+          setSite(next);
+          refresh().catch((error) => setMessage(error.message));
+        }}
+      />
+    );
   if (editing)
     return (
       <PageEditor
@@ -49,9 +62,17 @@ export function Admin({ site, setSite }) {
         }}
       />
     );
-
   return (
-    <AdminLayout {...{ tab, setTab, setMessage, action, setAuth, message }}>
+    <AdminLayout
+      {...{
+        tab,
+        setTab,
+        setMessage,
+        action,
+        setAuth,
+        message,
+      }}
+    >
       {tab === "dashboard" && (
         <Dashboard pages={pages} assets={assets} setTab={setTab} />
       )}
@@ -83,7 +104,7 @@ export function Admin({ site, setSite }) {
           onSave={(values) =>
             action(async () => {
               setSite(await api("/api/settings", "PATCH", values));
-              setMessage("Configuración actualizada en la web pública.");
+              setMessage("Configuración guardada.");
             })
           }
         />

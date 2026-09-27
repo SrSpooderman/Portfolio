@@ -1,3 +1,5 @@
+import ui from "../../ui/primitives.module.css";
+import loginStyles from "./Login.module.css";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,12 +13,17 @@ export function Login({ onLogin }) {
     formState: { isSubmitting, errors },
   } = useForm({
     resolver: zodResolver(
-      z.object({ username: z.string().min(1), password: z.string().min(1) }),
+      z.object({
+        username: z.string().min(1),
+        password: z.string().min(1),
+      }),
     ),
-    defaultValues: { username: "superadmin" },
+    defaultValues: {
+      username: "superadmin",
+    },
   });
   return (
-    <main className="login">
+    <main className={loginStyles["login"]}>
       <form
         onSubmit={handleSubmit(async (values) => {
           try {
@@ -27,12 +34,14 @@ export function Login({ onLogin }) {
           }
         })}
       >
-        <span className="eyebrow">PORTFOLIO / STUDIO</span>
-        <h1>Tu espacio creativo.</h1>
-        <p>Entra para dar forma a tu próxima idea.</p>
+        <h1 className={ui["h1"]}>SpiderPortfolio</h1>
         <label>
           Usuario
-          <input autoComplete="username" {...register("username")} />
+          <input
+            autoComplete="username"
+            {...register("username")}
+            className={ui["input"]}
+          />
         </label>
         <label>
           Contraseña
@@ -40,17 +49,23 @@ export function Login({ onLogin }) {
             type="password"
             autoComplete="current-password"
             {...register("password")}
+            className={ui["input"]}
           />
         </label>
         {(error || Object.keys(errors).length > 0) && (
-          <p role="alert" className="error">
+          <p role="alert" className={ui["p"] + " " + ui["error"]}>
             {error || "Completa ambos campos"}
           </p>
         )}
-        <button className="primary" disabled={isSubmitting}>
-          {isSubmitting ? "Entrando…" : "Entrar al backoffice ↗"}
+        <button
+          className={ui["button"] + " " + ui["primary"]}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Entrando…" : "Entrar"}
         </button>
-        <a href="/">← Volver al portfolio</a>
+        <a href="/" className={ui["a"]}>
+          ← Volver al portfolio
+        </a>
       </form>
     </main>
   );

@@ -1,31 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { usePuck } from "@puckeditor/core";
-import { cloneBlock, decompose, convertible } from "../blocks/transforms";
+import { blockNames } from "../blocks/defaults";
+import React, { useState } from "react";
+import { createUsePuck } from "@puckeditor/core";
+import ui from "../ui/primitives.module.css";
+import styles from "./ComponentLibrary.module.css";
+import { decompose, convertible, compressSection } from "../blocks/transforms";
 import { libraryApi } from "../api/components";
+import { useSectionLibrary } from "./SectionLibraryContext";
+import { ExportMenu } from "../features/export/ExportMenu";
+const usePuck = createUsePuck();
 export function ComponentLibrary() {
-  const { selectedItem, appState, dispatch, getSelectorForId } = usePuck();
-  const [items, setItems] = useState([]),
-    [name, setName] = useState(""),
-    [message, setMessage] = useState(""),
-    [busy, setBusy] = useState(false),
-    [open, setOpen] = useState(false);
-  const refresh = async () => setItems(await libraryApi());
-  useEffect(() => {
-    refresh().catch((e) => setMessage(e.message));
-  }, []);
-  async function action(fn) {
-    setBusy(true);
-    setMessage("");
-    try {
-      await fn();
-    } catch (e) {
-      setMessage(e.message);
-    } finally {
-      setBusy(false);
-    }
-  }
+  const selected = usePuck((s) => s.selectedItem);
+  const dispatch = usePuck((s) => s.dispatch);
+  const back = usePuck((s) => s.history.back);
+  const forward = usePuck((s) => s.history.forward);
+  const hasPast = usePuck((s) => s.history.hasPast);
+  const hasFuture = usePuck((s) => s.history.hasFuture);
+  const getSelectorForId = usePuck((s) => s.getSelectorForId);
+  const { refresh, message, setMessage, busy, action } = useSectionLibrary();
+  const [name, setName] = useState("");
   function replace(block) {
-    const target = getSelectorForId(selectedItem.props.id);
+    const target = getSelectorForId(selected.props.id);
     dispatch({
       type: "replace",
       destinationIndex: target.index,
@@ -33,125 +27,73 @@ export function ComponentLibrary() {
       data: block,
     });
   }
-  function insert(block) {
-    const copy = cloneBlock(block);
-    dispatch({
-      type: "set",
-      state: {
-        ...appState,
-        data: { ...appState.data, content: [...appState.data.content, copy] },
-      },
-    });
-    setMessage(
-      "Copia añadida al final. Arrástrala a cualquier grid o contenedor.",
-    );
-  }
   return (
-    <div className="component-library">
-      <div className="library-actions">
-        <button onClick={() => setOpen(!open)}>
-          {open ? "Cerrar biblioteca" : "Secciones"}
+    <div className={styles["component-library"]}>
+      <div className={styles["library-actions"]}>
+        <button className={ui.button} disabled={!hasPast} onClick={back}>
+          Deshacer
+        </button>
+        <button className={ui.button} disabled={!hasFuture} onClick={forward}>
+          Rehacer
         </button>
         <span>
-          {selectedItem
-            ? `Seleccionado: ${selectedItem.type}`
-            : "Selecciona un bloque o contenedor para personalizarlo"}
+          {selected ? blockNames[selected.type] : "Selecciona un bloque"}
         </span>
-        {selectedItem && convertible.includes(selectedItem.type) && (
+        {selected && ["Grid", "Container"].includes(selected.type) && (
           <button
-            onClick={() => {
-              replace(decompose(selectedItem));
-              setMessage(
-                "Convertido en elementos independientes. Puedes mover, añadir y borrar cada elemento.",
-              );
-            }}
+            className={ui.button}
+            onClick={() => replace(compressSection(selected))}
+          >
+            Comprimir sección
+          </button>
+        )}
+        {selected && convertible.includes(selected.type) && (
+          <button
+            className={ui.button}
+            onClick={() => replace(decompose(selected))}
           >
             Descomponer en elementos
           </button>
         )}
-      </div>
-      {open && (
-        <div className="library-panel">
-          <h3>Secciones</h3>
-          <p>
-            Crea o edita secciones en el apartado Secciones del backoffice.
-            También puedes guardar aquí el bloque seleccionado. Las inserciones
-            son copias independientes.
-          </p>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              action(async () => {
-                await libraryApi("", "POST", { name, content: selectedItem });
-                await refresh();
-                setName("");
-                setMessage("Sección guardada en la biblioteca.");
-              });
-            }}
-          >
-            <input
-              aria-label="Nombre de la sección"
-              placeholder="Nombre de mi sección"
-              value={name}
-              maxLength={100}
-              onChange={(e) => setName(e.target.value)}
-              required
+        {selected && (
+          <>
+            <ExportMenu
+              data={{ root: {}, content: [selected] }}
+              kind="section"
+              name="Sección"
             />
-            <button disabled={!selectedItem || busy || !name.trim()}>
-              Guardar seleccionado
-            </button>
-          </form>
-          <div className="library-cards">
-            {items.map((item) => (
-              <div key={item.id}>
-                <strong>{item.name}</strong>
-                <button onClick={() => insert(item.content)}>
-                  Insertar copia
+            <details>
+              <summary className={ui.a}>Guardar como sección</summary>
+              <form
+                className={styles["save-form"]}
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  action(async () => {
+                    await libraryApi("", "POST", { name, content: selected });
+                    await refresh();
+                    setName("");
+                    setMessage("Sección guardada.");
+                  });
+                }}
+              >
+                <input
+                  className={ui.input}
+                  aria-label="Nombre de la sección"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  maxLength={100}
+                />
+                <button className={ui.button} disabled={busy || !name.trim()}>
+                  Guardar sección
                 </button>
-                <button
-                  disabled={!selectedItem || busy}
-                  onClick={() => {
-                    if (
-                      confirm(
-                        `¿Actualizar «${item.name}» con la selección? Las copias existentes no cambian.`,
-                      )
-                    )
-                      action(async () => {
-                        await libraryApi("/" + item.id, "PATCH", {
-                          name: item.name,
-                          content: selectedItem,
-                        });
-                        await refresh();
-                        setMessage("Sección actualizada.");
-                      });
-                  }}
-                >
-                  Actualizar con selección
-                </button>
-                <button
-                  disabled={busy}
-                  onClick={() => {
-                    if (
-                      confirm(
-                        "¿Eliminar de la biblioteca? Las copias existentes se conservan.",
-                      )
-                    )
-                      action(async () => {
-                        await libraryApi("/" + item.id, "DELETE");
-                        await refresh();
-                      });
-                  }}
-                >
-                  Eliminar
-                </button>
-              </div>
-            ))}
-          </div>
-          {!items.length && <p>Todavía no has guardado secciones.</p>}
-        </div>
-      )}
+              </form>
+            </details>
+          </>
+        )}
+      </div>
       {message && (
-        <p className="library-message" role="status">
+        <p className={ui.p} role="status">
           {message}
         </p>
       )}

@@ -1,0 +1,140 @@
+@layer components {
+  .admin {
+    display: flex;
+    min-height: 100vh;
+  }
+  .admin aside {
+    width: 235px;
+    flex-shrink: 0;
+    padding: 32px 24px;
+    background: var(--sp-surface);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .admin aside > small {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+  .admin aside nav {
+    display: grid;
+    gap: 8px;
+    margin: 35px 0 auto;
+  }
+  .admin aside button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: none;
+    border: 0;
+    text-align: left;
+    font-size: 13px;
+  }
+  .admin aside button.active {
+    background: var(--sp-accent);
+    color: var(--sp-onAccent);
+  }
+  .admin aside > a:last-of-type {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+  }
+  .admin-main {
+    flex: 1;
+    min-width: 0;
+    padding: 0 5% 60px;
+  }
+  .admin-main > header {
+    height: 90px;
+    border-bottom: 1px solid var(--sp-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 9px;
+    letter-spacing: 1.2px;
+  }
+  .avatar {
+    padding: 12px 16px;
+    border-radius: 50%;
+    background: var(--sp-surface);
+  }
+  .admin-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 45px 0 28px;
+  }
+  .admin-title h1 {
+    font-size: 38px;
+    letter-spacing: -1.5px;
+    margin: 15px 0;
+  }
+  .admin-title p {
+    font-size: 13px;
+  }
+  @media (max-width: 900px) {
+    .admin aside {
+      width: 180px;
+      padding: 25px 14px;
+    }
+  }
+  @media (max-width: 650px) {
+    .admin {
+      display: block;
+    }
+    .admin aside {
+      width: 100%;
+      padding: 15px;
+      flex-direction: row;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .admin aside > small {
+      display: none;
+    }
+    .admin aside nav {
+      display: flex;
+      order: 4;
+      width: 100%;
+      margin: 0;
+      overflow: auto;
+    }
+    .admin aside > a:last-of-type {
+      margin-left: auto;
+    }
+    .admin aside > button {
+      font-size: 0;
+    }
+    .admin aside nav button {
+      white-space: nowrap;
+      padding: 9px;
+    }
+    .admin-main > header {
+      height: 55px;
+    }
+    .admin-title {
+      padding: 30px 0 20px;
+    }
+    .admin-title h1 {
+      font-size: 29px;
+    }
+    .admin-title > a {
+      display: none;
+    }
+  }
+  .admin aside button:not(.active):not(:disabled):hover {
+    background: var(--sp-neutralHover);
+  }
+  .admin aside button:not(.active):not(:disabled):active {
+    background: var(--sp-neutralActive);
+  }
+}
+
+@layer components {
+  .admin aside > a:first-child {
+    font-size: 20px;
+    letter-spacing: -0.6px;
+    overflow-wrap: anywhere;
+  }
+}

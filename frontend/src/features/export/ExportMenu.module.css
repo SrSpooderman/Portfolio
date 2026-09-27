@@ -1,0 +1,36 @@
+@layer components {
+  .root {
+    position: relative;
+    font-size: 13px;
+    color: var(--sp-text);
+  }
+  .root > summary {
+    cursor: pointer;
+    border: 1px solid var(--sp-border);
+    border-radius: 7px;
+    padding: 11px 17px;
+    background: var(--sp-background);
+  }
+  .root > summary:hover {
+    background: var(--sp-neutralHover);
+    border-color: var(--sp-focus);
+  }
+  .root > summary:focus-visible {
+    outline: 3px solid var(--sp-focus);
+    outline-offset: 2px;
+  }
+  .options {
+    display: grid;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 12px;
+    border: 1px solid var(--sp-border);
+    background: var(--sp-background);
+    border-radius: 7px;
+    max-width: 300px;
+  }
+  .options small {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+}

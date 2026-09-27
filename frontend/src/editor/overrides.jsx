@@ -1,3 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { ComponentLibrary } from "./ComponentLibrary";
-export const editorOverrides = { header: () => <ComponentLibrary /> };
+import { CanvasFrame } from "./CanvasFrame";
+import { SectionDrawer } from "./SectionDrawer";
+export const editorOverrides = {
+  header: () => <ComponentLibrary />,
+  iframe: CanvasFrame,
+  drawer: SectionDrawer,
+};

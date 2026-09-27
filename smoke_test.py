@@ -28,15 +28,15 @@ call('/api/auth/login', 'POST', {'username': 'superadmin', 'password': env['SUPE
 assert call('/api/auth/me')['name'] == 'superadmin'
 assert call('/api/public/pages/home')['content']['content']
 slug = 'smoke-' + uuid.uuid4().hex[:10]
-draft = {'content': [{'type': 'Text', 'props': {'id': 'smoke', 'title': 'Version A', 'text': 'Integration test'}}], 'root': {}}
+draft = {'content': [{'type': 'Heading', 'props': {'id': 'smoke', 'text': 'Version A', 'level': 'h2'}}], 'root': {}}
 page = call('/api/pages', 'POST', {'title': 'Smoke test', 'slug': slug, 'draft': draft})
 try:
     call('/api/public/pages/' + slug, status=404)
     call('/api/pages/' + page['id'] + '/publish', 'POST')
     assert call('/api/public/pages/' + slug)['content'] == draft
-    draft['content'][0]['props']['title'] = 'Version B'
+    draft['content'][0]['props']['text'] = 'Version B'
     call('/api/pages/' + page['id'], 'PATCH', {'title': 'Smoke test', 'slug': slug, 'draft': draft})
-    assert call('/api/public/pages/' + slug)['content']['content'][0]['props']['title'] == 'Version A'
+    assert call('/api/public/pages/' + slug)['content']['content'][0]['props']['text'] == 'Version A'
     call('/api/pages/' + page['id'] + '/publish', 'POST')
     assert call('/api/public/pages/' + slug)['content'] == draft
     call('/api/pages', 'POST', {'title': 'Duplicate', 'slug': slug}, status=409)

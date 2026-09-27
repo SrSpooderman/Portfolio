@@ -1,85 +1,516 @@
 {
+  "root": {
+    "props": {
+      "starter": true
+    }
+  },
   "content": [
     {
-      "type": "Hero",
+      "type": "Section",
       "props": {
-        "id": "Hero-0",
-        "eyebrow": "DISPONIBLE PARA NUEVOS PROYECTOS",
-        "title": "Ideas claras.\nExperiencias memorables.",
-        "description": "Diseño y desarrollo productos digitales que conectan a las personas con las marcas. De la primera idea al último detalle.",
-        "button": "Explora mi trabajo",
-        "link": "#proyectos"
-      }
-    },
-    {
-      "type": "Projects",
-      "props": {
-        "id": "Projects-1",
-        "title": "Una selección de mi trabajo",
-        "items": [
+        "id": "base-6",
+        "content": [
           {
-            "title": "Forma Studio",
-            "category": "IDENTIDAD · WEB DESIGN",
-            "description": "Una nueva perspectiva para un estudio de arquitectura.",
-            "url": "#contacto",
-            "color": "#e5e6df"
-          },
-          {
-            "title": "Orbit Finance",
-            "category": "PRODUCT DESIGN · DESARROLLO",
-            "description": "Las finanzas personales, un poco más humanas.",
-            "url": "#contacto",
-            "color": "#dedcf0"
-          },
-          {
-            "title": "Terra Objects",
-            "category": "E-COMMERCE · DIRECCIÓN DE ARTE",
-            "description": "Objetos cotidianos con historias extraordinarias.",
-            "url": "#contacto",
-            "color": "#ecdacb"
+            "type": "Container",
+            "props": {
+              "id": "base-5",
+              "content": [
+                {
+                  "type": "Paragraph",
+                  "props": {
+                    "id": "base-1",
+                    "text": "",
+                    "binding": "profession"
+                  }
+                },
+                {
+                  "type": "Heading",
+                  "props": {
+                    "id": "base-2",
+                    "text": "",
+                    "level": "h1",
+                    "binding": "name"
+                  }
+                },
+                {
+                  "type": "Paragraph",
+                  "props": {
+                    "id": "base-3",
+                    "text": "",
+                    "binding": "description"
+                  }
+                },
+                {
+                  "type": "Button",
+                  "props": {
+                    "id": "base-4",
+                    "label": "Ver proyectos",
+                    "url": "#proyectos"
+                  }
+                }
+              ],
+              "gap": 20,
+              "appearance": {
+                "padding": 48
+              },
+              "mobile": {
+                "padding": 24
+              },
+              "anchor": "inicio"
+            }
           }
         ]
       }
     },
     {
-      "type": "About",
+      "type": "Section",
       "props": {
-        "id": "About-2",
-        "title": "Diseño con intención.\nCódigo con propósito.",
-        "description": "Soy Alex, diseñador y desarrollador independiente. Combino estrategia, sensibilidad visual y tecnología para convertir problemas complejos en experiencias sencillas.",
-        "detail": "Desde Madrid, colaborando con personas de cualquier lugar."
-      }
-    },
-    {
-      "type": "Skills",
-      "props": {
-        "id": "Skills-3",
-        "title": "De la idea al lanzamiento",
-        "items": [
+        "id": "base-11",
+        "content": [
           {
-            "title": "01 / Estrategia",
-            "description": "Investigación, concepto y dirección creativa."
-          },
-          {
-            "title": "02 / Diseño",
-            "description": "Identidad, interfaces y experiencias digitales."
-          },
-          {
-            "title": "03 / Desarrollo",
-            "description": "Webs rápidas, accesibles y fáciles de usar."
+            "type": "Container",
+            "props": {
+              "id": "base-10",
+              "content": [
+                {
+                  "type": "Heading",
+                  "props": {
+                    "id": "base-7",
+                    "text": "Sobre mí",
+                    "level": "h2"
+                  }
+                },
+                {
+                  "type": "Paragraph",
+                  "props": {
+                    "id": "base-8",
+                    "text": "Descripción"
+                  }
+                },
+                {
+                  "type": "Paragraph",
+                  "props": {
+                    "id": "base-9",
+                    "text": "Ubicación"
+                  }
+                }
+              ],
+              "gap": 20,
+              "appearance": {
+                "padding": 48
+              },
+              "mobile": {
+                "padding": 24
+              },
+              "anchor": "sobre-mi"
+            }
           }
         ]
       }
     },
     {
-      "type": "Contact",
+      "type": "Section",
       "props": {
-        "id": "Contact-4",
-        "title": "¿Tienes algo\nen mente?",
-        "email": "hola@example.com",
-        "text": "Las mejores ideas empiezan con una conversación."
+        "id": "base-27",
+        "content": [
+          {
+            "type": "Container",
+            "props": {
+              "id": "base-26",
+              "content": [
+                {
+                  "type": "Heading",
+                  "props": {
+                    "id": "base-12",
+                    "text": "Proyectos",
+                    "level": "h2"
+                  }
+                },
+                {
+                  "type": "Grid",
+                  "props": {
+                    "id": "base-25",
+                    "content": [
+                      {
+                        "type": "Container",
+                        "props": {
+                          "id": "base-16",
+                          "content": [
+                            {
+                              "type": "Heading",
+                              "props": {
+                                "id": "base-13",
+                                "text": "Proyecto 1",
+                                "level": "h3"
+                              }
+                            },
+                            {
+                              "type": "Paragraph",
+                              "props": {
+                                "id": "base-14",
+                                "text": "Descripción"
+                              }
+                            },
+                            {
+                              "type": "Button",
+                              "props": {
+                                "id": "base-15",
+                                "label": "Ver proyecto",
+                                "url": "#"
+                              }
+                            }
+                          ],
+                          "gap": 20,
+                          "appearance": {
+                            "padding": 24,
+                            "background": "var(--sp-surface)",
+                            "radius": 12
+                          }
+                        }
+                      },
+                      {
+                        "type": "Container",
+                        "props": {
+                          "id": "base-20",
+                          "content": [
+                            {
+                              "type": "Heading",
+                              "props": {
+                                "id": "base-17",
+                                "text": "Proyecto 2",
+                                "level": "h3"
+                              }
+                            },
+                            {
+                              "type": "Paragraph",
+                              "props": {
+                                "id": "base-18",
+                                "text": "Descripción"
+                              }
+                            },
+                            {
+                              "type": "Button",
+                              "props": {
+                                "id": "base-19",
+                                "label": "Ver proyecto",
+                                "url": "#"
+                              }
+                            }
+                          ],
+                          "gap": 20,
+                          "appearance": {
+                            "padding": 24,
+                            "background": "var(--sp-surface)",
+                            "radius": 12
+                          }
+                        }
+                      },
+                      {
+                        "type": "Container",
+                        "props": {
+                          "id": "base-24",
+                          "content": [
+                            {
+                              "type": "Heading",
+                              "props": {
+                                "id": "base-21",
+                                "text": "Proyecto 3",
+                                "level": "h3"
+                              }
+                            },
+                            {
+                              "type": "Paragraph",
+                              "props": {
+                                "id": "base-22",
+                                "text": "Descripción"
+                              }
+                            },
+                            {
+                              "type": "Button",
+                              "props": {
+                                "id": "base-23",
+                                "label": "Ver proyecto",
+                                "url": "#"
+                              }
+                            }
+                          ],
+                          "gap": 20,
+                          "appearance": {
+                            "padding": 24,
+                            "background": "var(--sp-surface)",
+                            "radius": 12
+                          }
+                        }
+                      }
+                    ],
+                    "columns": 3,
+                    "mobileColumns": 1,
+                    "gap": 24
+                  }
+                }
+              ],
+              "gap": 20,
+              "appearance": {
+                "padding": 48
+              },
+              "mobile": {
+                "padding": 24
+              },
+              "anchor": "proyectos"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Section",
+      "props": {
+        "id": "base-40",
+        "content": [
+          {
+            "type": "Container",
+            "props": {
+              "id": "base-39",
+              "content": [
+                {
+                  "type": "Heading",
+                  "props": {
+                    "id": "base-28",
+                    "text": "Servicios",
+                    "level": "h2"
+                  }
+                },
+                {
+                  "type": "Grid",
+                  "props": {
+                    "id": "base-38",
+                    "content": [
+                      {
+                        "type": "Container",
+                        "props": {
+                          "id": "base-31",
+                          "content": [
+                            {
+                              "type": "Heading",
+                              "props": {
+                                "id": "base-29",
+                                "text": "Diseño",
+                                "level": "h3"
+                              }
+                            },
+                            {
+                              "type": "Paragraph",
+                              "props": {
+                                "id": "base-30",
+                                "text": "Descripción"
+                              }
+                            }
+                          ],
+                          "gap": 20
+                        }
+                      },
+                      {
+                        "type": "Container",
+                        "props": {
+                          "id": "base-34",
+                          "content": [
+                            {
+                              "type": "Heading",
+                              "props": {
+                                "id": "base-32",
+                                "text": "Desarrollo",
+                                "level": "h3"
+                              }
+                            },
+                            {
+                              "type": "Paragraph",
+                              "props": {
+                                "id": "base-33",
+                                "text": "Descripción"
+                              }
+                            }
+                          ],
+                          "gap": 20
+                        }
+                      },
+                      {
+                        "type": "Container",
+                        "props": {
+                          "id": "base-37",
+                          "content": [
+                            {
+                              "type": "Heading",
+                              "props": {
+                                "id": "base-35",
+                                "text": "Consultoría",
+                                "level": "h3"
+                              }
+                            },
+                            {
+                              "type": "Paragraph",
+                              "props": {
+                                "id": "base-36",
+                                "text": "Descripción"
+                              }
+                            }
+                          ],
+                          "gap": 20
+                        }
+                      }
+                    ],
+                    "columns": 3,
+                    "mobileColumns": 1,
+                    "gap": 24
+                  }
+                }
+              ],
+              "gap": 20,
+              "appearance": {
+                "padding": 48
+              },
+              "mobile": {
+                "padding": 24
+              },
+              "anchor": "servicios"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Section",
+      "props": {
+        "id": "base-50",
+        "content": [
+          {
+            "type": "Container",
+            "props": {
+              "id": "base-49",
+              "content": [
+                {
+                  "type": "Heading",
+                  "props": {
+                    "id": "base-41",
+                    "text": "Experiencia",
+                    "level": "h2"
+                  }
+                },
+                {
+                  "type": "Container",
+                  "props": {
+                    "id": "base-45",
+                    "content": [
+                      {
+                        "type": "Heading",
+                        "props": {
+                          "id": "base-42",
+                          "text": "Puesto · Empresa",
+                          "level": "h3"
+                        }
+                      },
+                      {
+                        "type": "Paragraph",
+                        "props": {
+                          "id": "base-43",
+                          "text": "Periodo"
+                        }
+                      },
+                      {
+                        "type": "Paragraph",
+                        "props": {
+                          "id": "base-44",
+                          "text": "Descripción"
+                        }
+                      }
+                    ],
+                    "gap": 20
+                  }
+                },
+                {
+                  "type": "Container",
+                  "props": {
+                    "id": "base-48",
+                    "content": [
+                      {
+                        "type": "Heading",
+                        "props": {
+                          "id": "base-46",
+                          "text": "Formación",
+                          "level": "h3"
+                        }
+                      },
+                      {
+                        "type": "Paragraph",
+                        "props": {
+                          "id": "base-47",
+                          "text": "Titulación · Centro"
+                        }
+                      }
+                    ],
+                    "gap": 20
+                  }
+                }
+              ],
+              "gap": 20,
+              "appearance": {
+                "padding": 48
+              },
+              "mobile": {
+                "padding": 24
+              },
+              "anchor": "experiencia"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Section",
+      "props": {
+        "id": "base-55",
+        "content": [
+          {
+            "type": "Container",
+            "props": {
+              "id": "base-54",
+              "content": [
+                {
+                  "type": "Heading",
+                  "props": {
+                    "id": "base-51",
+                    "text": "Contacto",
+                    "level": "h2"
+                  }
+                },
+                {
+                  "type": "Paragraph",
+                  "props": {
+                    "id": "base-52",
+                    "text": ""
+                  }
+                },
+                {
+                  "type": "Button",
+                  "props": {
+                    "id": "base-53",
+                    "label": "Email",
+                    "url": "",
+                    "binding": "email"
+                  }
+                }
+              ],
+              "gap": 20,
+              "appearance": {
+                "padding": 48
+              },
+              "mobile": {
+                "padding": 24
+              },
+              "anchor": "contacto"
+            }
+          }
+        ]
       }
     }
-  ],
-  "root": {}
+  ]
 }

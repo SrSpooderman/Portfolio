@@ -1,0 +1,130 @@
+@layer content {
+  .public {
+    max-width: 1600px;
+    margin: auto;
+  }
+  .public-header {
+    height: 105px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 6%;
+    border-bottom: 1px solid var(--sp-border);
+  }
+  .public-header nav {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+    font-size: 14px;
+  }
+  .nav-contact {
+    border: 1px solid var(--sp-border);
+    border-radius: 30px;
+    padding: 12px 22px;
+  }
+  .image-placeholder {
+    padding: 90px;
+    background: var(--sp-surface);
+    text-align: center;
+  }
+  .builder-block {
+    padding: var(--block-padding, 0px);
+    font-size: var(--block-font, inherit);
+    min-width: 0;
+    grid-column: var(--column, auto) / span var(--span, 1);
+    grid-row: var(--row, auto) / span var(--row-span, 1);
+    overflow-wrap: anywhere;
+  }
+  .builder-block.custom-color :is(h1, h2, h3, h4, p, small) {
+    color: inherit;
+  }
+  .builder-block.custom-font :is(h1, h2, h3, h4, p) {
+    font-size: inherit;
+  }
+  .builder-grid {
+    grid-template-columns: repeat(var(--columns, 3), minmax(0, 1fr));
+    min-height: 80px;
+    container-type: inline-size;
+  }
+  .builder-container {
+    min-height: 40px;
+  }
+  .builder-container > div {
+    max-width: 100%;
+  }
+  .builder-heading {
+    font-family: var(--heading-font, "Manrope", system-ui, sans-serif);
+    font-size: inherit;
+    letter-spacing: -0.03em;
+    white-space: pre-line;
+    margin: 0;
+    line-height: 1.15;
+  }
+  h1.builder-heading {
+    --heading-size: clamp(32px, 5vw, 76px);
+    font-size: var(--block-font, var(--heading-size));
+  }
+  h2.builder-heading {
+    --heading-size: clamp(26px, 3.5vw, 48px);
+    font-size: var(--block-font, var(--heading-size));
+  }
+  h3.builder-heading {
+    --heading-size: 26px;
+    font-size: var(--block-font, var(--heading-size));
+  }
+  .builder-paragraph {
+    margin: 0;
+    color: inherit;
+    white-space: pre-line;
+    line-height: 1.7;
+  }
+  .builder-button {
+    display: inline-block;
+    padding: 14px 24px;
+    text-decoration: none;
+  }
+  @media (max-width: 700px) {
+    .builder-grid {
+      grid-template-columns: repeat(var(--mobile-columns, 1), minmax(0, 1fr));
+    }
+    .builder-block {
+      grid-column: var(--mobile-column, auto) / span var(--mobile-span, 1);
+      grid-row: var(--mobile-row, auto) / span var(--mobile-row-span, 1);
+      padding: var(--mobile-padding, var(--block-padding, 0px));
+      font-size: var(--mobile-font, var(--block-font, inherit));
+    }
+    .builder-block.mobile-hidden {
+      display: none;
+    }
+    .builder-block :is(.builder-heading, .builder-paragraph) {
+      font-size: var(
+        --mobile-font,
+        var(--block-font, var(--heading-size, inherit))
+      );
+    }
+  }
+  @media (max-width: 650px) {
+    .public-header {
+      height: 80px;
+    }
+    .public-header nav {
+      gap: 15px;
+      font-size: 11px;
+    }
+    .nav-contact {
+      padding: 8px 11px;
+    }
+  }
+  .builder-button {
+    background: var(--button-bg, var(--sp-accent));
+    color: var(--button-color, var(--sp-onAccent));
+    border-radius: var(--button-radius, 30px);
+  }
+  .builder-button:hover {
+    background: var(--button-hover, var(--sp-hover));
+    text-decoration: none;
+  }
+  .builder-button:active {
+    background: var(--button-active, var(--sp-active));
+  }
+}

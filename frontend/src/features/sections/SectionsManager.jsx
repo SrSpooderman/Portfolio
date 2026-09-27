@@ -46,9 +46,7 @@ export function SectionsManager() {
     );
     setEditing({ ...saved, id: saved.id });
     await refresh();
-    setMessage(
-      "Sección guardada. Ya puedes insertarla desde el editor de páginas.",
-    );
+    setMessage("Sección guardada.");
   }
   if (editing)
     return (

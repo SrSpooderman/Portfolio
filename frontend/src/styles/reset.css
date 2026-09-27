@@ -1,0 +1,16 @@
+@layer reset {
+  :root {
+    font-family: "DM Sans", system-ui, sans-serif;
+    font-synthesis: none;
+    background: var(--sp-background);
+    color: var(--sp-text);
+  }
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+  }
+}

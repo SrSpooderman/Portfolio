@@ -1,3 +1,7 @@
+import { ExportMenu } from "../export/ExportMenu";
+import contentStyles from "../../blocks/content.module.css";
+import ui from "../../ui/primitives.module.css";
+import editorStyles from "../../editor/Editor.module.css";
 import React from "react";
 import { VisualEditor } from "../../editor/VisualEditor";
 import { Renderer } from "../../renderer/Renderer";
@@ -15,13 +19,14 @@ export function SectionEditor({
   setData,
 }) {
   return (
-    <div className="section-editor">
-      <div className="editor-toolbar">
+    <div className={editorStyles["section-editor"]}>
+      <div className={editorStyles["editor-toolbar"]}>
         <button
           onClick={() => {
             if (confirm("¿Salir? Los cambios sin guardar se perderán."))
               setEditing(null);
           }}
+          className={ui["button"]}
         >
           ← Secciones
         </button>
@@ -31,21 +36,23 @@ export function SectionEditor({
           value={name}
           maxLength={100}
           onChange={(e) => setName(e.target.value)}
+          className={ui["input"]}
         />
-        <button onClick={() => setPreview(!preview)}>
+        <button onClick={() => setPreview(!preview)} className={ui["button"]}>
           {preview ? "Volver al editor" : "Previsualizar sección"}
         </button>
         <button
-          className="primary"
+          className={ui["button"] + " " + ui["primary"]}
           disabled={busy}
           onClick={() => action(() => save())}
         >
           Guardar sección
         </button>
+        <ExportMenu data={data} name={name} kind="section" />
         <span role="status">{message}</span>
       </div>
       {preview ? (
-        <div className="public">
+        <div className={contentStyles["public"]}>
           <Renderer data={data} />
         </div>
       ) : (

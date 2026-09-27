@@ -1,0 +1,15 @@
+@layer components {
+  .root {
+    max-width: 700px;
+    padding: 40px 24px;
+    margin: auto;
+  }
+  .root header {
+    border-bottom: 1px solid var(--sp-border);
+    margin-bottom: 24px;
+  }
+  .root h1 {
+    margin-top: 24px;
+    font-size: 28px;
+  }
+}

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { basic } from "./basicConfig";
 import { common } from "../blocks/fields";
 import { Box } from "../blocks/BlockBox";
-export function enhanceConfig(legacy) {
-  const all = { ...legacy, ...basic };
+export function enhanceConfig() {
   return {
     categories: {
       layout: { title: "Estructura y grid", components: ["Grid", "Container"] },
@@ -11,17 +10,14 @@ export function enhanceConfig(legacy) {
         title: "Elementos libres",
         components: ["Heading", "Paragraph", "Photo", "Button", "Spacer"],
       },
-      legacy: {
-        title: "Compatibilidad",
+      sections: {
+        title: "Secciones agrupadas",
         visible: false,
-        components: [
-          ...Object.keys(legacy).filter((k) => k !== "Spacer"),
-          "Decoration",
-        ],
+        components: ["Section"],
       },
     },
     components: Object.fromEntries(
-      Object.entries(all).map(([name, c]) => [
+      Object.entries(basic).map(([name, c]) => [
         name,
         {
           ...c,

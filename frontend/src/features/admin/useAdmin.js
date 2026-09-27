@@ -42,11 +42,7 @@ export function useAdmin() {
     });
     if (publish) await api("/api/pages/" + editing.id + "/publish", "POST");
     await refresh();
-    setMessage(
-      publish
-        ? "Publicado. Tu web ya está actualizada."
-        : "Borrador guardado. La web pública no cambia.",
-    );
+    setMessage(publish ? "Página publicada." : "Borrador guardado.");
   }
   return {
     auth,
