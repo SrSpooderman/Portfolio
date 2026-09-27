@@ -3,25 +3,6 @@
     max-width: 1600px;
     margin: auto;
   }
-  .public-header {
-    height: 105px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 0 6%;
-    border-bottom: 1px solid var(--sp-border);
-  }
-  .public-header nav {
-    display: flex;
-    align-items: center;
-    gap: 35px;
-    font-size: 14px;
-  }
-  .nav-contact {
-    border: 1px solid var(--sp-border);
-    border-radius: 30px;
-    padding: 12px 22px;
-  }
   .image-placeholder {
     padding: 90px;
     background: var(--sp-surface);
@@ -117,18 +98,6 @@
         --mobile-font,
         var(--block-font, var(--heading-size, inherit))
       );
-    }
-  }
-  @media (max-width: 650px) {
-    .public-header {
-      height: 80px;
-    }
-    .public-header nav {
-      gap: 15px;
-      font-size: 11px;
-    }
-    .nav-contact {
-      padding: 8px 11px;
     }
   }
   .builder-button {
