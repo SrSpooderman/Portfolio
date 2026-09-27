@@ -8,8 +8,7 @@ export function PagesPanel({
   action,
   refresh,
   setMessage,
-  setEditing,
-  setDraft,
+  openPage,
 }) {
   return (
     <>
@@ -34,9 +33,7 @@ export function PagesPanel({
           </div>
           <button
             onClick={() => {
-              setEditing(p);
-              setDraft(p.draft);
-              setMessage("");
+              openPage(p);
             }}
             className={ui["button"]}
           >

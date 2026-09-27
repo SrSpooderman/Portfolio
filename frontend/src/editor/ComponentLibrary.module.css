@@ -14,6 +14,36 @@
   .library-actions span {
     font-size: 12px;
   }
+  .library-actions button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .selection-path {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    min-width: 180px;
+    color: var(--sp-muted);
+    font-size: 12px;
+  }
+  .selection-path button {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--sp-text);
+    cursor: pointer;
+    font: inherit;
+  }
+  .selection-path button:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .selection-path button:focus-visible {
+    outline: 3px solid var(--sp-focus);
+    outline-offset: 3px;
+  }
   .library-actions summary {
     cursor: pointer;
   }

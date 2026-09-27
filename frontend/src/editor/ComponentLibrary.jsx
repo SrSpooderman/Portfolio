@@ -1,4 +1,4 @@
-import { blockNames } from "../blocks/defaults";
+import { blockDefaults } from "../blocks/defaults";
 import React, { useState } from "react";
 import { createUsePuck } from "@puckeditor/core";
 import ui from "../ui/primitives.module.css";
@@ -7,6 +7,8 @@ import { decompose, convertible, compressSection } from "../blocks/transforms";
 import { libraryApi } from "../api/components";
 import { useSectionLibrary } from "./SectionLibraryContext";
 import { ExportMenu } from "../features/export/ExportMenu";
+import { SelectionBreadcrumb } from "./SelectionBreadcrumb";
+import { RotateCcw, Smartphone } from "lucide-react";
 const usePuck = createUsePuck();
 export function ComponentLibrary() {
   const selected = usePuck((s) => s.selectedItem);
@@ -20,12 +22,28 @@ export function ComponentLibrary() {
   const [name, setName] = useState("");
   function replace(block) {
     const target = getSelectorForId(selected.props.id);
+    if (!target) return;
     dispatch({
       type: "replace",
       destinationIndex: target.index,
       destinationZone: target.zone,
       data: block,
     });
+  }
+  function resetAppearance() {
+    if (!selected) return;
+    const block = structuredClone(selected);
+    const defaults = blockDefaults[selected.type] || {};
+    if (defaults.appearance)
+      block.props.appearance = structuredClone(defaults.appearance);
+    else delete block.props.appearance;
+    replace(block);
+  }
+  function resetMobile() {
+    if (!selected) return;
+    const block = structuredClone(selected);
+    delete block.props.mobile;
+    replace(block);
   }
   return (
     <div className={styles["component-library"]}>
@@ -36,9 +54,19 @@ export function ComponentLibrary() {
         <button className={ui.button} disabled={!hasFuture} onClick={forward}>
           Rehacer
         </button>
-        <span>
-          {selected ? blockNames[selected.type] : "Selecciona un bloque"}
-        </span>
+        <SelectionBreadcrumb />
+        {selected && (
+          <>
+            <button className={ui.button} onClick={resetAppearance}>
+              <RotateCcw size={16} />
+              Estilos
+            </button>
+            <button className={ui.button} onClick={resetMobile}>
+              <Smartphone size={16} />
+              Móvil
+            </button>
+          </>
+        )}
         {selected && ["Grid", "Container"].includes(selected.type) && (
           <button
             className={ui.button}

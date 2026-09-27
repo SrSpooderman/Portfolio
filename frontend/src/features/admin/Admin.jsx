@@ -23,6 +23,7 @@ export function Admin({ site, setSite }) {
     setEditing,
     draft,
     setDraft,
+    savedDraft,
     message,
     setMessage,
     busy,
@@ -30,6 +31,7 @@ export function Admin({ site, setSite }) {
     setPreview,
     refresh,
     action,
+    openPage,
     save,
   } = useAdmin();
   if (auth === null)
@@ -59,6 +61,8 @@ export function Admin({ site, setSite }) {
           message,
           draft,
           setDraft,
+          savedDraft,
+          site,
         }}
       />
     );
@@ -83,8 +87,7 @@ export function Admin({ site, setSite }) {
           action={action}
           refresh={refresh}
           setMessage={setMessage}
-          setEditing={setEditing}
-          setDraft={setDraft}
+          openPage={openPage}
         />
       )}
       {tab === "media" && (

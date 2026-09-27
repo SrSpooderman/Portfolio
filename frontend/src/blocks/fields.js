@@ -52,9 +52,9 @@ const positionFields = {
 };
 export const common = {
   anchor: text("Ancla de enlace (sin #)"),
-  appearance: object("Estilos", styleFields),
-  placement: object("Posición en el grid", positionFields),
-  mobile: object("Móvil (hasta 700 px)", {
+  appearance: object("Apariencia", styleFields),
+  placement: object("Layout en grid", positionFields),
+  mobile: object("Responsive móvil", {
     ...positionFields,
     padding: number("Espacio interior", 0, 300),
     fontSize: number("Tamaño de texto", 0, 100),
