@@ -13,4 +13,30 @@
   .settings-form p {
     font-size: 12px;
   }
+  .publish-fieldset {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    border: 1px solid var(--sp-border);
+    border-radius: 8px;
+    margin: 24px 0;
+    padding: 18px;
+  }
+  .publish-fieldset legend {
+    padding: 0 8px;
+    font-weight: 600;
+  }
+  .publish-fieldset label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 10px 12px;
+    border: 1px solid var(--sp-border);
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .publish-fieldset input {
+    accent-color: var(--sp-accent);
+  }
 }

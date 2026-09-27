@@ -2,18 +2,33 @@ import ui from "../../ui/primitives.module.css";
 import themePickerStyles from "./ThemePicker.module.css";
 import React from "react";
 import { palettes } from "../../theme/palettes";
-export function ThemePicker({ register, error }) {
+const semanticSwatches = [
+  ["background", "Fondo"],
+  ["text", "Texto"],
+  ["surface", "Superficie"],
+  ["accent", "Acento"],
+  ["border", "Borde"],
+];
+export function ThemePicker({
+  value,
+  preview,
+  onPreview,
+  onApply,
+  onCancel,
+  error,
+}) {
   return (
     <fieldset className={themePickerStyles["theme-picker"]}>
       <legend>Paleta de colores</legend>
-      <p className={ui["p"]}>Portfolio y administración.</p>
       <div className={themePickerStyles["theme-options"]}>
         {Object.entries(palettes).map(([id, t]) => (
           <label className={themePickerStyles["theme-option"]} key={id}>
             <input
               type="radio"
+              name="theme-preview"
               value={id}
-              {...register("theme")}
+              checked={preview === id}
+              onChange={() => onPreview(id)}
               className={ui["input"]}
             />
             <strong>{t.name}</strong>
@@ -44,21 +59,42 @@ export function ThemePicker({ register, error }) {
                 </span>
               </span>
               <span className={themePickerStyles["theme-swatches"]}>
-                {[t.background, t.surface, t.text, t.muted, t.accent].map(
-                  (color, i) => (
+                {semanticSwatches.map(([token, label]) => (
+                  <span
+                    className={themePickerStyles["semantic-swatch"]}
+                    key={token}
+                  >
                     <i
-                      key={i}
                       style={{
-                        background: color,
+                        background: t[token],
                         borderColor: t.border,
                       }}
                     />
-                  ),
-                )}
+                    <span>{label}</span>
+                  </span>
+                ))}
               </span>
             </span>
           </label>
         ))}
+      </div>
+      <div className={themePickerStyles["theme-actions"]}>
+        <button
+          type="button"
+          className={ui["button"] + " " + ui["primary"]}
+          disabled={preview === value}
+          onClick={onApply}
+        >
+          Aplicar
+        </button>
+        <button
+          type="button"
+          className={ui["button"]}
+          disabled={preview === value}
+          onClick={onCancel}
+        >
+          Cancelar
+        </button>
       </div>
       {error && (
         <p role="alert" className={ui["p"]}>

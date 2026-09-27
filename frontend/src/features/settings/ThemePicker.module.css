@@ -52,15 +52,33 @@
     font-size: 11px;
   }
   .theme-swatches {
-    display: flex;
-    gap: 5px;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 7px;
     margin-top: 10px;
   }
-  .theme-swatches i {
-    width: 20px;
-    height: 20px;
+  .semantic-swatch {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+    color: inherit;
+    font-size: 9px;
+  }
+  .semantic-swatch i {
+    width: 100%;
+    height: 18px;
     border: 1px solid;
-    border-radius: 50%;
+    border-radius: 4px;
+  }
+  .semantic-swatch span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .theme-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
   }
   @media (max-width: 480px) {
     .theme-options {

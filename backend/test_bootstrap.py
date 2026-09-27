@@ -66,6 +66,16 @@ class BootstrapTests(unittest.TestCase):
         self.assertEqual(self.client.get('/api/public/pages/home').json()['content'],home)
         self.assertEqual(len(self.client.get('/api/pages').json()),1)
 
+    def test_first_run_can_keep_home_as_draft(self):
+        self.login()
+        result=self.client.post('/api/setup',json={**PROFILE,'start_status':'draft'})
+        self.assertEqual(result.status_code,200,result.text)
+        self.assertFalse(result.json()['setup_required'])
+        self.assertEqual(self.client.get('/api/public/pages/home').status_code,404)
+        page=self.client.get('/api/pages').json()[0]
+        self.assertIsNone(page['published'])
+        self.assertEqual(len(page['draft']['content']),6)
+
     def test_existing_documents_are_converted_once_and_backed_up(self):
         self.login()
         self.client.post('/api/setup',json=PROFILE)

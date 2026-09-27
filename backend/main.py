@@ -94,6 +94,9 @@ class Settings(BaseModel):
     def strip_text(cls, value):
         return value.strip() if isinstance(value, str) else value
 
+class SetupSettings(Settings):
+    start_status: Literal['published','draft'] = 'published'
+
 @app.patch('/api/settings',dependencies=[Depends(admin)])
 def save_settings(body:Settings):
     if not stored_settings().get('setup_completed'):
@@ -103,8 +106,10 @@ def save_settings(body:Settings):
     return public_settings(value)
 
 @app.post('/api/setup',dependencies=[Depends(admin)])
-def complete_setup(body:Settings):
-    profile = {**body.model_dump(), 'setup_completed': True}
+def complete_setup(body:SetupSettings):
+    values = body.model_dump()
+    start_status = values.pop('start_status')
+    profile = {**values, 'setup_completed': True}
     profile['title'] = profile['title'] or profile['name']
     with engine.begin() as connection:
         # Compare-and-set makes two simultaneous setup submissions harmless.
@@ -120,9 +125,15 @@ def complete_setup(body:Settings):
             draft = json.loads(home['draft'])
             if draft.get('root', {}).get('props', {}).get('starter'):
                 content = json.dumps(populate_starter(draft, profile))
-                connection.execute(text('UPDATE pages SET draft=:content,published=:content,'
-                                        'updated_at=:date,published_at=:date WHERE id=:id'),
-                                   {'content':content,'date':now(),'id':home['id']})
+                date = now()
+                if start_status == 'published':
+                    connection.execute(text('UPDATE pages SET draft=:content,published=:content,'
+                                            'updated_at=:date,published_at=:date WHERE id=:id'),
+                                       {'content':content,'date':date,'id':home['id']})
+                else:
+                    connection.execute(text('UPDATE pages SET draft=:content,published=NULL,'
+                                            'updated_at=:date,published_at=NULL WHERE id=:id'),
+                                       {'content':content,'date':date,'id':home['id']})
     return public_settings(profile)
 
 def validate_blocks(blocks):

@@ -14,7 +14,7 @@ docker compose up --build -d
 - API: http://localhost:8080/api/docs
 - Usuario: `superadmin`. Contraseña: `SUPERADMIN_PASSWORD` de `.env`.
 
-En el primer acceso a administración aparece **Configuración inicial**. Introduce nombre, profesión, email, título, descripción y paleta. No hay datos personales predefinidos. Al completar el formulario se personaliza y publica la portada inicial de `backend/seed.json`.
+En el primer acceso a administración aparece **Configuración inicial**. Introduce nombre, profesión, email, paleta y si la portada empieza publicada o como borrador. No hay datos personales predefinidos. Al completar el formulario se personaliza la portada inicial de `backend/seed.json`.
 
 Para aplicar cambios de código a una instalación existente:
 
@@ -36,7 +36,7 @@ En **Blocks → Secciones** hay seis plantillas: presentación, sobre mí, proye
 
 ## Configuración e imágenes
 
-**Configuración** cambia los datos del sitio y la paleta: Lino, Glaciar, Grafito o Rojo y negro. La paleta se aplica al portfolio y a la administración; los colores personalizados de los bloques se conservan.
+**Configuración** cambia los datos del sitio y la paleta: Lino, Glaciar, Grafito o Rojo y negro. Puedes previsualizar una paleta, aplicarla al formulario o cancelar la prueba antes de guardar. La paleta se aplica al portfolio y a la administración; los colores personalizados de los bloques se conservan.
 
 Sube imágenes en **Imágenes** o desde el campo de imagen del editor. Se admiten JPG, PNG y WebP de hasta 10 MB; el servidor genera WebP. Los textos de los bloques se editan en cada página.
 

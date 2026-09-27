@@ -12,7 +12,6 @@ export function SetupScreen({ site, onComplete }) {
         <strong>SpiderPortfolio</strong>
         <h1 className={ui.h1}>Configuración inicial</h1>
       </header>
-      <p className={ui.p}>Introduce tus datos para crear el portfolio.</p>
       <SettingsForm
         site={site}
         busy={busy}
